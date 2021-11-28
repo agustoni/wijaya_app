@@ -12,8 +12,8 @@ use backend\models\Project;
 use backend\models\ProjectType;
 use backend\models\Item;
 use backend\models\ItemUnit;
-
 use backend\models\SupplierItem;
+use backend\models\ProjectWorker;
 
 class ProjectController extends Controller{
 	public function actionIndex(){
@@ -26,9 +26,10 @@ class ProjectController extends Controller{
 
 	public function actionCreate(){
 		$projectType = ProjectType::find()->where("Status = 1")->all();
+		$role = new ProjectWorker;
 
 		return $this->render('create', [
-			"projectType" => $projectType
+			"projectType" => $projectType,
 		]);
 	}
 
