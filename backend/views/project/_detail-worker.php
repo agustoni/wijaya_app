@@ -6,22 +6,23 @@
     	<div class="row">
     		<div class="col-md-6">
 				<label class="font-weight-bold">List Pekerja</label>
-				<input type="text" class="form-control" id="projectworker_input-Worker" placeholder="Nama Pekerja. . .">
+				<input type="text" class="form-control" id="search-worker" placeholder="Nama Pekerja. . .">
 			</div>
     	</div>
-        <table class="table table-borderless" id="form-sales-item">
+        <table class="table table-borderless" id="form-worker-list">
     		<thead>
     			<tr>
     				<th>#</th>
     				<th>Nama</th>
     				<th>Role</th>
+                    <th>Start</th>
     				<td></td>
     			</tr>
     		</thead>	
     		<tbody id="worker-list">
     			
     		</tbody>
-            <tbody>
+           <!--  <tbody>
                 <tr>
                     <td>
                         <button id="btn-add-worker" class="btn btn-warning">
@@ -29,7 +30,7 @@
                         </button>
                     </td>
                 </tr>
-            </tbody>
+            </tbody> -->
     	</table>
     </div>
 </div>
@@ -38,33 +39,59 @@
         var workerRole = ['Pekerja', 'Sales', 'Koordinator']
 
         $(document).ready(function(){
-            console.log('asd')
-            console.log(workerRole)
+            var src = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '".Yii::$app->urlManager->createUrl('project/get-worker')."&q=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            })
+
+            $('#search-worker').typeahead(null, {
+                name: 'name',
+                display: 'Name',
+                source: src
+            })
         })
 
-        $('#btn-add-worker').click(function(){
-            var lastNumber = (typeof $('#worker-list tr td:nth-child(1)').last().html() !== 'undefined'? parseInt($('#worker-list tr td:nth-child(1)').last().html()) : 0)
+        $('body').on('typeahead:select', '#search-worker', function(ev, suggestion) {
+            if($('.worker_input-IdWorker[value='+suggestion.Id+']').length == 0){
+                var lastNumber = (typeof $('#worker-list tr td:nth-child(1)').last().html() !== 'undefined'? parseInt($('#worker-list tr td:nth-child(1)').last().html()) : 0)
 
-            createWorkerRow(lastNumber)
+                createWorkerRow(lastNumber, suggestion.Id, suggestion.Name)
+            }else{
+                alert('pekerja sudah dipilih sebelumnya')
+            }   
         })
 
-        function createWorkerRow(lastNumber, name = '', role = ''){
-            var itemContent = $(`<tr id='item_row-`+lastNumber+`'>
+        // $('#btn-add-worker').click(function(){
+        //     var lastNumber = (typeof $('#worker-list tr td:nth-child(1)').last().html() !== 'undefined'? parseInt($('#worker-list tr td:nth-child(1)').last().html()) : 0)
+
+        //     createWorkerRow(lastNumber)
+        // })
+
+        function createWorkerRow(lastNumber, idWorker = '', name = '', role = '', startAt = ''){
+            var optionRole = ''
+
+            $(workerRole).each(function(idx, val){
+                optionRole += `<option value='`+val+`' `+(role == val? 'selected' : '')+`>`+val+`</option>`
+            })
+
+            var workerContent = $(`<tr id='item_row-`+lastNumber+`'>
                                     <td>`+parseInt(lastNumber+1)+`</td>
                                     <td>
-                                        <input class='form-control item_input-ItemName' name='ProjectItem[`+lastNumber+`][ItemName]' placeholder='Item. . .' value='`+itemName+`' data-text='`+itemName+`'>
-                                        <input class='form-control item_input-IdItem' placeholder='this supposed to be hidden' name='ProjectItem[`+lastNumber+`][IdItem]' value=`+idItem+`>
+                                        <span class='worker_input-Name'>`+name+`</span>
+                                        <input type='' class='form-control worker_input-IdWorker' name='ProjectWorker[`+lastNumber+`][IdWorker]' value='`+idWorker+`'>
                                     </td>
                                     <td>
-                                        <div class='input-group mb-3'>
-                                            <input class='form-control item_input-Qty' name='ProjectItem[`+lastNumber+`][Qty]' placeholder='Qty. . .' value=`+qty+`>
-                                            <div class='input-group-append'>
-                                                <span class='input-group-text item_input-ItemUoM'>-</span>
-                                            </div>
-                                        </div>
+                                        <select class='form-control worker_input-Role' name='ProjectWorker[`+lastNumber+`][Role]'>
+                                            <option value=''>- Role -</option>
+                                            `+optionRole+`
+                                        </select> 
                                     </td>
                                     <td>
-                                        <input class='form-control item_input-Price' name='ProjectItem[`+lastNumber+`][Price]' placeholder='Price. . .' value=`+price+`>
+                                        <input class='form-control worker_input-StartAt' name='ProjectItem[`+lastNumber+`][StartAt]' placeholder='Mulai bekerja. . .' value=`+startAt+`>
                                     </td>
                                     <td>
                                         <button type='button' class='btn btn-danger item_remove'>
@@ -73,9 +100,28 @@
                                     </td>
                                 </tr>`)
 
-            $('#form-sales-item #item-list').append(itemContent)
+            $('#form-worker-list #worker-list').append(workerContent)
 
-            itemTypeaheadInit($('#item_row-'+lastNumber+' .item_input-ItemName'))
+            // itemTypeaheadInit($('#item_row-'+lastNumber+' .item_input-ItemName'))
+        }
+
+        function itemTypeaheadInit(inputTypeahead){
+            var src = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                remote: {
+                    url: '".Yii::$app->urlManager->createUrl('project/get-sales-item')."&q=%QUERY',
+                    wildcard: '%QUERY'
+                }
+            })
+
+            inputTypeahead.typeahead(null, {
+                name: 'name',
+                display: 'Name',
+                source: src
+            })
         }
     ";
+
+    $this->registerJs($projectWorkerScript, \yii\web\View::POS_END);
 ?>

@@ -257,4 +257,8 @@ class SiteController extends Controller
             'model' => $model
         ]);
     }
+
+    public function actionGeneratePasswordHash($password){
+        echo Yii::$app->security->generatePasswordHash($password);
+    }
 }

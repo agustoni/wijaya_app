@@ -76,7 +76,11 @@
                 $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').attr('value', suggestion.IdItem)
                 $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').attr('data-text', suggestion.Name)
                 $(this).parents(`tr[id^='item_row-']`).find('.item_input-ItemUoM').text(suggestion.UoM)
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-Price').val(suggestion.Price)
+                $(this).parents(`tr[id^='item_row-']`).find('.item_input-Qty').attr('value', 1)
+                $(this).parents(`tr[id^='item_row-']`).find('.item_input-Price').attr('value', suggestion.Price)
+                $(this).parents(`tr[id^='item_row-']`).find('.item_input-Price').attr('data-price', suggestion.Price)
+
+                $('.calc').trigger('keyup')
 
                 if(suggestion.StatusPrice == 0){
                     $(this).parents('tr').attr('style','background-color:#fdd8d8')
@@ -93,23 +97,53 @@
         })
 
 		// ================== FUNCTION ==================
+            $('body').on('keypress', '.isNumber', function (evt){
+                evt = (evt) ? evt : window.event;
+                var charCode = (evt.which) ? evt.which : evt.keyCode;
+
+                if (charCode != 46 && (charCode < 48 || charCode > 57)) {
+                    return false;
+                }
+                return true;
+            })
+
+            $('body').on('keyup', '.calc', function(){
+                var qty = $(this).parents('tr').find('.item_input-Qty').val()
+                var price = $(this).parents('tr').find('.item_input-Price').attr('data-price')
+
+                qty = (qty ? parseFloat(qty):0);
+                price = (price ? parseInt(price):0)
+
+                var totalPrice = qty * price
+                var grandTotal = 0
+
+                $(this).parents('tr').find('.item_input-Price').val(totalPrice)
+
+                $('.item_input-Price').each(function(){
+                    grandTotal += parseInt($(this).val())
+                })
+
+                $('.item_input-Total').val(grandTotal)
+
+            })
+
 			function createItemRow(lastNumber, itemName = '', idItem = '', qty = '', price = ''){
                 var itemContent = $(`<tr id='item_row-`+lastNumber+`'>
 					    				<td>`+parseInt(lastNumber+1)+`</td>
 					    				<td>
 					    					<input class='form-control item_input-ItemName' name='ProjectItem[`+lastNumber+`][ItemName]' placeholder='Item. . .' value='`+itemName+`' data-text='`+itemName+`'>
-					    					<input class='form-control item_input-IdItem' placeholder='this supposed to be hidden' name='ProjectItem[`+lastNumber+`][IdItem]' value=`+idItem+`>
+					    					<input class='form-control item_input-IdItem' placeholder='this supposed to be hidden' name='ProjectItem[`+lastNumber+`][IdItem]' value='`+idItem+`''>
 					    				</td>
 					    				<td>
 					    					<div class='input-group mb-3'>
-												<input class='form-control item_input-Qty' name='ProjectItem[`+lastNumber+`][Qty]' placeholder='Qty. . .' value=`+qty+`>
+												<input class='form-control item_input-Qty isNumber calc' name='ProjectItem[`+lastNumber+`][Qty]' placeholder='Qty. . .' value='`+qty+`'>
 												<div class='input-group-append'>
 													<span class='input-group-text item_input-ItemUoM'>-</span>
 												</div>
 											</div>
 					    				</td>
 					    				<td>
-					    					<input class='form-control item_input-Price' name='ProjectItem[`+lastNumber+`][Price]' placeholder='Price. . .' value=`+price+`>
+					    					<input class='form-control item_input-Price isNumber calc' name='ProjectItem[`+lastNumber+`][Price]' placeholder='Price. . .' value='`+price+`' data-price='`+price+`'>
 					    				</td>
 					    				<td>
 					    					<button type='button' class='btn btn-danger item_remove'>

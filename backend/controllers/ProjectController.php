@@ -95,6 +95,23 @@ class ProjectController extends Controller{
         die;
 	}
 
+	public function actionGetWorker($q){
+		$query = new Query;
+        $query->select('usr.id as Id, usr.name as Name')
+              ->from('auth_assignment ua')
+              ->leftJoin('user usr', 'ua.user_id = usr.id')
+              ->where('ua.item_name = "Worker" AND usr.id NOT IN(1) AND usr.name  LIKE "%'.$q.'%"')
+              ->orderBy('usr.username ASC');
+
+        $worker = $query->createCommand()->queryAll();
+
+        echo Json::encode($worker);
+
+        // echo "<pre>";
+        // print_r($worker);
+        die;
+	}
+
 	public function actionDeleteProjectContact(){
 		$idProjectContact = $_POST['idProjectContact'];
 
