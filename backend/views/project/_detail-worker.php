@@ -1,3 +1,17 @@
+<?php 
+    $this->registerCssFile("https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css", [
+        'depends'=> [
+            \yii\bootstrap4\BootstrapAsset::className()
+        ]
+    ]);
+
+    $this->registerJsFile("https://code.jquery.com/ui/1.13.0/jquery-ui.js",[
+        'depends' => [
+            \yii\web\JqueryAsset::className()
+        ],
+        'position' => \yii\web\View::POS_END
+    ]);
+?>
 <div class="card card-light mb-3" id="project-worker-container">
     <div class="card-header bg-info text-white p-2">
         <h4 class="card-title m-0">Pekerja</h4>
@@ -56,6 +70,7 @@
         })
 
         $('body').on('typeahead:select', '#search-worker', function(ev, suggestion) {
+            $(this).typeahead('val', '')
             if($('.worker_input-IdWorker[value='+suggestion.Id+']').length == 0){
                 var lastNumber = (typeof $('#worker-list tr td:nth-child(1)').last().html() !== 'undefined'? parseInt($('#worker-list tr td:nth-child(1)').last().html()) : 0)
 
@@ -63,6 +78,20 @@
             }else{
                 alert('pekerja sudah dipilih sebelumnya')
             }   
+        })
+
+        $('body').on('click', '.worker_remove', function(){
+            $(this).parents('tr').remove()
+
+            $(`tr[id^='worker_row-']`).each(function(x){
+                $(this).find('td:nth-child(1)').html(parseInt(x)+1)
+
+                $(this).find(`:input[name^='ProjectWorker']`).each(function(){
+                    var name = $(this).attr('name').split(/[[\]]{1,2}/)
+                    
+                    $(this).attr('name', 'ProjectWorker['+x+']['+name[2]+']')
+                })
+            })
         })
 
         // $('#btn-add-worker').click(function(){
@@ -78,11 +107,11 @@
                 optionRole += `<option value='`+val+`' `+(role == val? 'selected' : '')+`>`+val+`</option>`
             })
 
-            var workerContent = $(`<tr id='item_row-`+lastNumber+`'>
+            var workerContent = $(`<tr id='worker_row-`+lastNumber+`'>
                                     <td>`+parseInt(lastNumber+1)+`</td>
                                     <td>
                                         <span class='worker_input-Name'>`+name+`</span>
-                                        <input type='' class='form-control worker_input-IdWorker' name='ProjectWorker[`+lastNumber+`][IdWorker]' value='`+idWorker+`'>
+                                        <input type='hidden' class='form-control worker_input-IdWorker' name='ProjectWorker[`+lastNumber+`][IdWorker]' value='`+idWorker+`'>
                                     </td>
                                     <td>
                                         <select class='form-control worker_input-Role' name='ProjectWorker[`+lastNumber+`][Role]'>
@@ -91,18 +120,20 @@
                                         </select> 
                                     </td>
                                     <td>
-                                        <input class='form-control worker_input-StartAt' name='ProjectItem[`+lastNumber+`][StartAt]' placeholder='Mulai bekerja. . .' value=`+startAt+`>
+                                        <input class='form-control worker_input-StartAt datepicker' name='ProjectItem[`+lastNumber+`][StartAt]' placeholder='Mulai bekerja. . .' value=`+startAt+`>
                                     </td>
                                     <td>
-                                        <button type='button' class='btn btn-danger item_remove'>
+                                        <button type='button' class='btn btn-danger worker_remove'>
                                             <i class='fas fa-times'></i>
                                         </button>
                                     </td>
                                 </tr>`)
 
             $('#form-worker-list #worker-list').append(workerContent)
-
-            // itemTypeaheadInit($('#item_row-'+lastNumber+' .item_input-ItemName'))
+            $(workerContent).find('.datepicker').datepicker({
+                // minDate: 0,
+                dateFormat: 'dd-mm-yy'
+            })
         }
 
         function itemTypeaheadInit(inputTypeahead){

@@ -33,6 +33,10 @@ class ProjectController extends Controller{
 		]);
 	}
 
+	public function actionTestModul(){
+		return $this->render('_detail-item');
+	}
+
 	public function actionGetSalesItem($q){
 // ==================================================================================================================
 		// $query = new Query;
@@ -84,12 +88,8 @@ class ProjectController extends Controller{
 
     	$out = [];
     	foreach ($data as $d) {
-            $out[] = ['IdItem' => $d['IdItem'], 'IdSupplierItem' => $d['IdSupplierItem'], 'Name' => $d['ItemName'], 'UoM' => $d['UoM'], 'Price' => $d['LastPrice'], 'StatusPrice' => $d['StatusPrice']];
+            $out[] = ['IdItem' => $d['IdItem'], 'IdSupplierItem' => $d['IdSupplierItem'], 'Name' => $d['ItemName'], 'UoM' => $d['UoM'], 'Price' => $d['LastPrice'], 'StatusPrice' => $d['StatusPrice'], 'LastUpdated' => date('d-m-Y'), strtotime($d['LastUpdated'])];
         }
-
-        // echo "<pre>";
-        // print_r($out);
-        // die;
 
         echo Json::encode($out);
         die;

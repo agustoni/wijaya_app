@@ -12,7 +12,7 @@
         <h4 class="card-title m-0">Item Project & Data Lainnya</h4>
     </div>
     <div class="card-body p-2">
-    	<table class="table table-borderless" id="form-sales-item">
+    	<table class="table table-borderless table-sm" id="form-sales-item">
     		<thead>
     			<tr>
     				<th>#</th>
@@ -32,9 +32,53 @@
                             <i class="fas fa-plus text-white"></i>
                         </button>
                     </td>
-                    <td colspan=2></td>
-                    <td>
-                        <input class="form-control item_input-Total" placeholder="Total. . .">
+                    <td class="text-right" colspan="2">
+                        <b>Total Modal</b>
+                    </td>
+                    <td class="text-right">
+                        <label class="item_label-TotalCost"></label>
+                        <input type="hidden" class="form-control item_input-TotalCost" placeholder="Total Modal. . .">
+                    </td>
+                    
+                </tr>
+                <tr style="background-color:#eee">
+                    <td class="text-right" colspan="3">
+                        <b>Margin</b>
+                    </td>
+                    <td class="text-right">
+                        <!-- <div class="row"> -->
+                            <!-- <div class="col-md"> -->
+                                <div class="input-group mb-3 btn-margin-type d-none">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-secondary btn-margin-type" data-type="nominal">
+                                            Num
+                                        </button>
+                                    </div>
+                                    <!-- <input class="form-control item_input-Margin text-right" placeholder="Margin. . ."> -->
+                                </div>
+                                <div class="input-group mb-3 btn-margin-type">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-secondary btn-margin-type" data-type="persen">
+                                            %
+                                        </button>
+                                        <input class="form-control item_input-MarginPercent" >
+                                    </div>
+                                    <!-- <input class="form-control item_input-Margin text-right" placeholder="Margin. . ."> -->
+                                </div>
+                            <!-- </div> -->
+                            <!-- <div class="col-md"> -->
+                                <input type="" class="form-control item_input-MarginNominal text-right" placeholder="Margin. . .">
+                            <!-- </div> -->
+                        <!-- </div> -->
+                    </td>
+                </tr>
+                <tr style="background-color:#eee">
+                    <td class="text-right" colspan="3">
+                        <b>Grand Total</b>
+                    </td>
+                    <td class="text-right">
+                        <label class="item_GrandTotal-label"></label>
+                        <input type="hidden" class="form-control item_input-GrandTotal" placeholder="Grand Total. . .">
                     </td>
                 </tr>
             </tbody>
@@ -77,6 +121,7 @@
                 $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').attr('data-text', suggestion.Name)
                 $(this).parents(`tr[id^='item_row-']`).find('.item_input-ItemUoM').text(suggestion.UoM)
                 $(this).parents(`tr[id^='item_row-']`).find('.item_input-Qty').attr('value', 1)
+                $(this).parents(`tr[id^='item_row-']`).find('.item_Price-label').html(numberFormat('', suggestion.Price))
                 $(this).parents(`tr[id^='item_row-']`).find('.item_input-Price').attr('value', suggestion.Price)
                 $(this).parents(`tr[id^='item_row-']`).find('.item_input-Price').attr('data-price', suggestion.Price)
 
@@ -84,15 +129,17 @@
 
                 if(suggestion.StatusPrice == 0){
                     $(this).parents('tr').attr('style','background-color:#fdd8d8')
+                    $(this).parents('tr').find('.price-exp').html(suggestion.LastUpdated)
                 }else{
                     $(this).parents('tr').removeAttr('style')
+                    $(this).parents('tr').find('.price-exp').html('')
                 }
             }else{
                 alert('item sudah dipilih sebelumnya')
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-ItemName').typeahead('val', '')
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').val('')
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').attr('data-text', '')
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-ItemUoM').text('-')
+                // $(this).parents(`tr[id^='item_row-']`).find('.item_input-ItemName').typeahead('val', '')
+                // $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').val('')
+                // $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').attr('data-text', '')
+                // $(this).parents(`tr[id^='item_row-']`).find('.item_input-ItemUoM').text('-')
             }
         })
 
@@ -115,16 +162,47 @@
                 price = (price ? parseInt(price):0)
 
                 var totalPrice = qty * price
+                var totalCost = 0
                 var grandTotal = 0
+                var margin = ($('.item_input-MarginNominal').val()? $('.item_input-MarginNominal').val() : 0)
 
                 $(this).parents('tr').find('.item_input-Price').val(totalPrice)
+                $(this).parents('tr').find('.item_Price-label').html(numberFormat('',totalPrice))
 
                 $('.item_input-Price').each(function(){
-                    grandTotal += parseInt($(this).val())
+                    totalCost += parseInt($(this).val())
                 })
 
-                $('.item_input-Total').val(grandTotal)
+                grandTotal += parseInt(margin) + parseInt(totalCost)
 
+                $('.item_input-TotalCost').val(totalCost)
+                $('.item_label-TotalCost').html(numberFormat('', totalCost))
+
+                $('.item_input-GrandTotal').val(grandTotal)
+                $('.item_GrandTotal-label').html(numberFormat('', grandTotal))
+            })
+
+            $('body').on('click', '.item_remove', function(){
+                if($(`tr[id^='item_row-']`).length > 1){
+                    $(this).parents('tr').remove()
+
+                    $(`tr[id^='item_row-']`).each(function(x){
+                        $(this).find('td:nth-child(1)').html(parseInt(x)+1)
+
+                        $(this).find(`:input[name^='ProjectItem']`).each(function(){
+                            var name = $(this).attr('name').split(/[[\]]{1,2}/)
+                            
+                            $(this).attr('name', 'ProjectItem['+x+']['+name[2]+']')
+                        })
+                    })
+                }else{
+                    $(this).parents(`tr`).find(':input').val('')
+                    $(this).parents(`tr`).removeAttr('style')
+                    $(this).parents(`tr`).find('.item_input-IdItem').attr('value', '')
+                    $(this).parents(`tr`).find('.item_input-IdItem').attr('data-text', '')
+                }
+
+                $('.calc').trigger('keyup')
             })
 
 			function createItemRow(lastNumber, itemName = '', idItem = '', qty = '', price = ''){
@@ -132,7 +210,7 @@
 					    				<td>`+parseInt(lastNumber+1)+`</td>
 					    				<td>
 					    					<input class='form-control item_input-ItemName' name='ProjectItem[`+lastNumber+`][ItemName]' placeholder='Item. . .' value='`+itemName+`' data-text='`+itemName+`'>
-					    					<input class='form-control item_input-IdItem' placeholder='this supposed to be hidden' name='ProjectItem[`+lastNumber+`][IdItem]' value='`+idItem+`''>
+					    					<input type='hidden' class='form-control item_input-IdItem' placeholder='this supposed to be hidden' name='ProjectItem[`+lastNumber+`][IdItem]' value='`+idItem+`'>
 					    				</td>
 					    				<td>
 					    					<div class='input-group mb-3'>
@@ -142,8 +220,11 @@
 												</div>
 											</div>
 					    				</td>
-					    				<td>
-					    					<input class='form-control item_input-Price isNumber calc' name='ProjectItem[`+lastNumber+`][Price]' placeholder='Price. . .' value='`+price+`' data-price='`+price+`'>
+					    				<td class='text-right'>
+                                            <label class='item_Price-label'></label>
+                                            <br>
+                                            <small class='price-exp'></small>
+					    					<input type='hidden' class='form-control item_input-Price isNumber calc' name='ProjectItem[`+lastNumber+`][Price]' placeholder='Price. . .' value='`+price+`' data-price='`+price+`'>
 					    				</td>
 					    				<td>
 					    					<button type='button' class='btn btn-danger item_remove'>

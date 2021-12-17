@@ -215,7 +215,6 @@
 					$('#upload-file-container').removeClass('bg-white')
 					$('#upload-file-container .div-placeholder').removeClass('d-none')
 				}
-	        	console.log(arrProjectFiles)
 	        })
 
 	        function removeFile(fileType, index){
