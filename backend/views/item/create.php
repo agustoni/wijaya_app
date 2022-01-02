@@ -1,19 +1,18 @@
 <?php
-
 use yii\helpers\Html;
 
-$this->registerCssFile("@web/web/css/select2.min.css", [
-    'depends'=> [
-        \yii\bootstrap4\BootstrapAsset::className()
-    ]
-]);
+// $this->registerCssFile("@web/web/css/select2.min.css", [
+//     'depends'=> [
+//         \yii\bootstrap4\BootstrapAsset::className()
+//     ]
+// ]);
 
-$this->registerJsFile("@web/web/js/select2.min.js",[
-    'depends' => [
-        \yii\web\JqueryAsset::className()
-    ],
-    'position' => \yii\web\View::POS_END
-]);
+// $this->registerJsFile("@web/web/js/select2.min.js",[
+//     'depends' => [
+//         \yii\web\JqueryAsset::className()
+//     ],
+//     'position' => \yii\web\View::POS_END
+// ]);
 
 $this->title = 'Create Item';
 ?>
@@ -40,11 +39,12 @@ $this->title = 'Create Item';
             ]) ?>
         <!-- END ITEM MASTER -->
 
+
         <!-- ITEM PART -->
             <?= $this->render('_form-item-part', [
                 "model" => $model
             ]) ?>
-        <!-- END ITEM PART -->
+        <!-- END ITEM PART -->     
     </div>
 </div>
 <?php

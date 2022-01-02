@@ -189,7 +189,15 @@
         // ================== SAVE VALIDATION ==================
 
         // ================== FUNCTION ==================
-            
+            // $('#item_input-ItemType').change(function(){
+            //     var type = $(this).val()
+
+            //     if(type == 2){//jika tipe item kombinasi, tampilkan form item part
+            //         $('#item-combined-container').removeClass('d-none')
+            //     }else{
+            //         $('#item-combined-container').addClass('d-none')
+            //     }
+            // })
         // ================== END FUNCTION ==================
     ";
     $this->registerJs($scriptFormItemMaster, \yii\web\View::POS_END);

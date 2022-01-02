@@ -15,7 +15,6 @@ use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 
 class ItemController extends Controller{
-
 	public function actionIndex(){
 		$model = Item::find()->orderBy(['Id'=>SORT_DESC])->all();
 		$itemType = new Item;
@@ -32,7 +31,7 @@ class ItemController extends Controller{
 		$itemPart = null;
 
 		if($model->Type == 2){
-			$itemPart = Json::encode($this->getItemParent('', $id));
+			$itemPart = Json::encode($this->getItemCombined('', $id));
 		}
 
 		return $this->render('view', [
@@ -54,25 +53,33 @@ class ItemController extends Controller{
 		$transaction = \Yii::$app->db->beginTransaction();
 
 		try{
+			$name = $_POST['Item']['Name'];
+			$uom = $_POST['Item']['IdUoM'];
+			$type = $_POST['Item']['Type'];
+			$description = $_POST['Item']['Description'];
+
 			if($id){
+				// update data dari menu view
 				$model = Item::findOne($id);
 			}else{
+				// create data
 				$model = new Item;
-				$checkData = Item::find()->where("Name = '".$_POST['Item']['Name']."' AND IdUoM = ".$_POST['Item']['IdUoM']." AND Type = ".$_POST['Item']['Type'])->one();
+			
+				if(!$uom){
+					$uom = $this->saveUom($_POST['Item']['NewUoM']);
+				}
+
+				// check apakah item dengan IdUoM yang di-input sudah ada
+				$checkData = Item::find()->where("Name = '".$name."' AND IdUoM = ".$uom." AND Type = ".$type)->one();
 				if(!empty($checkData)){
 					throw new \Exception("Input gagal: Item yang dimasukan sudah terdaftar!"); 
 				}
 			}
-			
-			if(!empty($_POST['Item']['IdUoM'])){
-				$model->IdUoM = $_POST['Item']['IdUoM'];
-			}else{
-				$model->IdUoM = $this->saveUom($_POST['Item']['NewUoM']);
-			}
-
-			$model->Name = $_POST['Item']['Name'];
-			$model->Type = $_POST['Item']['Type'];
-			$model->Description = $_POST['Item']['Description'];
+		
+			$model->Name = $name;
+			$model->IdUoM = $uom;
+			$model->Type = $type;
+			$model->Description = $description;
 
 			if($model->save()){
 				$transaction->commit();
@@ -97,7 +104,7 @@ class ItemController extends Controller{
 			$idPartParent = $_POST['IdItemParent'];
 
 			foreach($_POST['ItemPart'] as $ipt){
-				$description = (empty($ipt['Description']))? 'Description = null' : "Description = '".$ipt['Description']."'";
+				$description = (empty($ipt['Description']))? null : $ipt['Description'];
 
 				if(empty($ipt['IdItemPart'])){
 					// 	QUERY NEW RECORD
@@ -106,7 +113,7 @@ class ItemController extends Controller{
 			        ]);
 				}else{
 					// QUERY UPDATE RECORD
-					$dataUpdate .= "UPDATE item_part SET IdItem = ".$ipt['IdItem'].", Qty = ".$ipt['Qty'].", ".$description." WHERE Id = ".$ipt['IdItemPart'].";";
+					$dataUpdate .= "UPDATE item_part SET IdItem = ".$ipt['IdItem'].", Qty = ".$ipt['Qty'].", Description = '".$description."' WHERE Id = ".$ipt['IdItemPart'].";";
 				}
 			}
 
@@ -181,13 +188,13 @@ class ItemController extends Controller{
         die;
     }
 
-    public function actionGetAllItemParent($q = null, $preSelect = null){
-    	$out = $this->getItemParent($q, $preSelect);
+    public function actionGetAllItemCombined($q = null, $preSelect = null){
+    	$out = $this->getItemCombined($q, $preSelect);
         echo Json::encode($out);
         die;
     }
 
-    public function getItemParent($q, $preSelect){
+    public function getItemCombined($q, $preSelect){
     	$modelItem = new Item;
     	$itemType = $modelItem->itemType;
 
@@ -201,7 +208,7 @@ class ItemController extends Controller{
     			$itemPart[] = ['IdItemPart' => $part->Id, 'Id' => $part->IdItem, 'Part' => $part->item__r->Name, 'UoM' => $part->item__r->itemUnit__r->UoM, 'Qty' => $part->Qty, 'Description' => $part->Description];
     		}
 
-            $out[] = ['Id' => $data->Id, 'Name' => $data->Name." (".$data->itemUnit__r->UoM."; ".$itemType[$data->Type].")", 'ItemPart' => $itemPart];
+            $out[] = ['Id' => $data->Id, 'Name' => $data->Name." (".$data->itemUnit__r->UoM.")", 'ItemPart' => $itemPart];
     	}else{
     		$data = Item::find()->where('Name LIKE "%' . $q .'%" AND Type = 2')->all();
 
@@ -212,7 +219,7 @@ class ItemController extends Controller{
 	    			$itemPart[] = ['IdItemPart' => $part->Id, 'Id' => $part->IdItem, 'Part' => $part->item__r->Name, 'UoM' => $part->item__r->itemUnit__r->UoM, 'Qty' => $part->Qty, 'Description' => $part->Description];
 	    		}
 
-	            $out[] = ['Id' => $d->Id, 'Name' => $d->Name." (".$d->itemUnit__r->UoM."; ".$itemType[$d->Type].")", 'ItemPart' => $itemPart];
+	            $out[] = ['Id' => $d->Id, 'Name' => $d->Name." (".$d->itemUnit__r->UoM.")", 'ItemPart' => $itemPart];
 	        }
     	}
 
