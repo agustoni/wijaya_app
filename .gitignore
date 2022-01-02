@@ -9,7 +9,16 @@ vendor/
 frontend/web/images/
 frontend/web/files/
 frontend/web/assets/
-backend/web/assets/
+backend/web/assets/*
+backend/web/index-test.php
+backend/web/index.php
+backend/config/main.php
+frontend/web/index.php
+frontend/web/robots.txt
+common/config/*
+yii
+yii_test
+yii_test.bat
 /.htaccess
 
 # Node artifact files
