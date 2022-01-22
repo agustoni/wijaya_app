@@ -28,7 +28,7 @@
     	</div>
     	<div class="row mb-2">
     		<div class="col-md-8">
-    			<label class="font-weight-bold" for="product_input-ItemName">Item Yang Dibutuhkan</label>
+    			<label class="font-weight-bold">Item Yang Dibutuhkan</label>
                 <select class="form-control select2-itemlist-input"></select>
     		</div>
     	</div>
