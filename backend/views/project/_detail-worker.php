@@ -1,16 +1,16 @@
 <?php 
-    $this->registerCssFile("https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css", [
+    $this->registerCssFile("@web/web/css/jquery-ui.css", [
         'depends'=> [
             \yii\bootstrap4\BootstrapAsset::className()
         ]
     ]);
 
-    $this->registerJsFile("https://code.jquery.com/ui/1.13.0/jquery-ui.js",[
-        'depends' => [
-            \yii\web\JqueryAsset::className()
-        ],
-        'position' => \yii\web\View::POS_END
+    $this->registerJsFile("@web/web/js/jquery-ui.js", [
+        'depends'=> [
+            \yii\bootstrap4\BootstrapAsset::className()
+        ]
     ]);
+    
 ?>
 <div class="card card-light mb-3" id="project-worker-container">
     <div class="card-header bg-info text-white p-2">

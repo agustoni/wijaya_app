@@ -28,6 +28,8 @@
     .table-product-item td:nth-child(6){width: 18%}
     .table-product-item td:nth-child(7){width: 7%}
 
+    .table-product-item tfoot{border-top: 2px solid #eee;background-color: #eee;}
+
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
@@ -48,141 +50,82 @@
         </div>
         <hr>
 
-    	<!-- <table class="table table-borderless table-sm" id="form-sales-item">
-    		<thead>
-    			<tr>
-    				<th>#</th>
-    				<th>Item</th>
-    				<th>Qty</th>
-    				<th>Harga</th>
-    				<td></td>
-    			</tr>
-    		</thead>	
-    		<tbody id="item-list">
-    			
-    		</tbody>
-            <tbody>
-                <tr>
-                    <td>
-                        <button id="btn-add-item" class="btn btn-warning">
-                            <i class="fas fa-plus text-white"></i>
-                        </button>
-                    </td>
-                    <td class="text-right" colspan="2">
-                        <b>Total Modal</b>
-                    </td>
-                    <td class="text-right">
-                        <label class="item_label-TotalCost"></label>
-                        <input type="hidden" class="form-control item_input-TotalCost" placeholder="Total Modal. . .">
-                    </td>
-                    
-                </tr>
-                <tr style="background-color:#eee">
-                    <td class="text-right" colspan="3">
-                        <b>Margin</b>
-                    </td>
-                    <td class="text-right">
-                        <div class="input-group mb-3 btn-margin-type d-none">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-secondary btn-margin-type" data-type="nominal">
-                                    Num
-                                </button>
-                            </div>
-                        </div>
-                        <div class="input-group mb-3 btn-margin-type">
-                            <div class="input-group-prepend">
-                                <button class="btn btn-secondary btn-margin-type" data-type="persen">
-                                    %
-                                </button>
-                                <input class="form-control item_input-MarginPercent" >
-                            </div>
-                        </div>
-                        <input type="" class="form-control item_input-MarginNominal text-right" placeholder="Margin. . .">
-                    </td>
-                </tr>
-                <tr style="background-color:#eee">
-                    <td class="text-right" colspan="3">
-                        <b>Grand Total</b>
-                    </td>
-                    <td class="text-right">
-                        <label class="item_GrandTotal-label"></label>
-                        <input type="hidden" class="form-control item_input-GrandTotal" placeholder="Grand Total. . .">
-                    </td>
-                </tr>
-            </tbody>
-    	</table> -->
-
-        <!-- ================================================================= --> 
         <div id="form-project-product">
             <ul class="nav nav-tabs" role="tablist">
-                <!-- <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#product_1">Product 1</a>
+                <li class='nav-item' id="nav-tab-summary">
+                    <a class='nav-link active' data-toggle='tab' href='#tab-content-summary'>
+                        Rangkuman
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#product_2">Product 2</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#product_3">Product 3</a>
-                </li> -->
             </ul>
             <div class="tab-content">
-                <!-- <div id="product_1" class="tab-pane active"><br>
-                    <h3 class='product_label-ProductName'>LIFT ACX-BR3</h3>
-
-                    <table class='table table-borderless table-sm table-product-item'>
+                <div id="tab-content-summary" class='tab-pane active'>
+                    <!-- <h3 class='product_label-ProductName'>asdasd</h3>
+                    <hr> -->
+                    
+                    <table class="table table-striped table-summary table-sm">
                         <thead>
-                            <th>#</th>
-                            <th>Item</th>
-                            <th>Qty</th>
-                            <th>Deskripsi</th>
-                            <th>Total</th>
-                            <th></th>
+                            <tr>
+                                <th>#</th>
+                                <th>Product</th>
+                                <th>Modal</th>
+                                <th>Harga</th>
+                                <th>Margin</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class='align-middle'>1</td>
-                                <td class='align-middle'>
-                                    <label class='product_label-Item'>Item 1</label>
-                                    <input type='text' class='form-control product_input-IdItem' placeholder='supposed to be hidden'>
-                                </td>
-                                <td  class='align-middle'>
-                                    <input type='number' class='form-control product-input-Qty'>
-                                </td>
-                                <td  class='align-middle'>
-                                    <textarea class='form-control product_input-Description' rows='3'></textarea>
-                                </td>
-                                <td  class='align-middle'>
-                                    <label class='product_label-Price'>Rp 123.123.123</label>
-                                    <input type='text' class='form-control product_input-Price' placeholder='supposed to be hidden'>
-                                </td>
-                                <td  class='align-middle'>
-                                    <button type='button' class='btn btn-danger product_removeitem'>
-                                        <i class='fas fa-times'></i>
-                                    </button>
-                                </td>
+                                <td>1</td>
+                                <td>Lift 1</td>
+                                <td>Rp 3.000.000</td>
+                                <td>Rp 5.000.000</td>
+                                <td>Rp 2.000.000</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Lift 2</td>
+                                <td>Rp 3.000.000</td>
+                                <td>Rp 5.000.000</td>
+                                <td>Rp 2.000.000</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Lift 3</td>
+                                <td>Rp 3.000.000</td>
+                                <td>Rp 5.000.000</td>
+                                <td>Rp 2.000.000</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Lift 4</td>
+                                <td>Rp 3.000.000</td>
+                                <td>Rp 5.000.000</td>
+                                <td>Rp 2.000.000</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Lift 5</td>
+                                <td>Rp 3.000.000</td>
+                                <td>Rp 5.000.000</td>
+                                <td>Rp 2.000.000</td>
                             </tr>
                         </tbody>
+                        <tfoot class='bg-success text-white'>
+                            <tr>
+                                <th colspan=2 class="text-center">Total</th>
+                                <th>Rp 15.000.000</th>
+                                <th>Rp 25.000.000</th>
+                                 <th>Rp 10.000.000</th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
-                <div id="product_2" class="container tab-pane fade"><br>
-                    <h3>Menu 1</h3>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                </div>
-                <div id="product_3" class="container tab-pane fade"><br>
-                    <h3>Menu 2</h3>
-                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-                </div> -->
             </div>
         </div>
     </div>
 </div>
 <?php 
 	$scriptDetailItem = "
-		$(document).ready(function(){
-			itemTypeaheadInit($('.item_input-ItemName'))
-            // createItemRow(0)
-		})
-
         // ===================== SELECT 2 PRODUCT =====================
             $('.select2-product-input').select2({
                 ajax: {
@@ -198,12 +141,8 @@
 
             $('.select2-product-input').on('select2:select', function (e) {
                 var selected = e.params.data
+
                 console.log(selected)
-                // if($('.itemlist_input-IdItem').length == 0 || $('.itemlist_input-IdItem[value='+selected.id+']').length == 0){
-                //     createItemList(selected.id, selected.text)
-                // }else{
-                //     alert(selected.text+' sudah ada dalam list product')
-                // }
 
                 $('.select2-product-input').val(null).trigger('change')
 
@@ -211,17 +150,21 @@
             })
 
             function createProduct(data){
-                var x = $('#form-project-product .nav-tabs li').length
+                $('.nav-link').removeClass('active')
+                $('.tab-pane').removeClass('active')
+
+                var x = $('#form-project-product .nav-tabs .list-tab-product').length
                 var productName = 'Produk '+(parseInt(x)+1)
                 var tab = $(`<li class='nav-item'>
-                                <a class='nav-link `+(x == 0? 'active' : '')+`' data-toggle='tab' href='#product_`+x+`'>`+productName+`</a>
+                                <a class='nav-link active list-tab-product' data-toggle='tab' href='#product_`+x+`'>`+productName+`</a>
                             </li>`)
 
-                var tabContent = $(`<div id='product_`+x+`' class='tab-pane `+(x == 0? 'active' : '')+`'>
+                var tabContent = $(`<div id='product_`+x+`' class='tab-pane active'>
                                         <h3 class='product_label-ProductName'>`+data.text+`</h3>
+                                        <hr>
                                         <table class='table table-borderless table-sm table-product-item'>
                                             <thead>
-                                                <th>#</th>
+                                                <th class='text-center'>#</th>
                                                 <th>Item</th>
                                                 <th>Qty</th>
                                                 <th>UoM</th>
@@ -232,103 +175,219 @@
                                             <tbody>
                                                 
                                             </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th colspan=5 class='align-middle text-right'>Modal</th>
+                                                    <th colspan=2 class='align-middle text-right'>
+                                                        <label class='product_label-TotalCost '></label>
+                                                        <!-- <input class='form-control product_input-TotalCost text-right'> -->
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan=5 class='align-middle text-right'>Margin</th>
+                                                    <th colspan=2 class='align-middle text-right'>
+                                                        <div class='input-group'>
+                                                            <div class='input-group-prepend w-25'>
+                                                                <input class='form-control product_input-TotaPercent text-right isNumber' placeholder='Persen. . .'>
+                                                            </div>
+                                                            
+                                                            <input class='form-control product_input-TotalMargin text-right isNumber'>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th colspan=5 class='align-middle text-right'>Harga Jual</th>
+                                                    <th colspan=2 class='align-middle text-right'>
+                                                        <label class='product_label-TotalPrice '></label>
+                                                        <input type='hidden' class='form-control product_input-TotalPrice text-right' readonly>
+                                                    </th>
+                                                </tr>
+                                            </tfoot>
                                         </table>
+                                        <div class='col-md-12'>
+                                            <button class='btn btn-warning btn-sm add-product-item'>
+                                                <i class='fas fa-plus text-white'></i>
+                                            </button>
+                                        </div>
                                     </div>`)
 
                 $(data.listitem).each(function(i, val){
-                    var tabContentItem = $(`<tr>
-                                                <td class='align-middle'>`+(parseInt(i)+1)+`</td>
-                                                <td class='align-middle'>
-                                                    <label class='product_label-Item'>`+val.ItemName+`</label>
-                                                    <input type='text' class='form-control product_input-IdItem' value='`+val.IdItem+`' placeholder='supposed to be hidden'>
-                                                </td>
-                                                <td  class='align-middle'>
-                                                    <input type='number' class='form-control product-input-Qty' value='`+val.Qty+`'>
-                                                </td>
-                                                <th>
-                                                    `+val.UoM+`
-                                                </th>
-                                                <td  class='align-middle'>
-                                                    <textarea class='form-control product_input-Description' rows='3'></textarea>
-                                                </td>
-                                                <td  class='align-middle'>
-                                                    // <label class='product_label-Price'>Rp 123.123.123</label>
-                                                    <input type='text' class='form-control product_input-Price'>
-                                                </td>
-                                                <td  class='align-middle'>
-                                                    <button type='button' class='btn btn-danger product_removeitem'>
-                                                        <i class='fas fa-times'></i>
-                                                    </button>
-                                                </td>
-                                            </tr>`);
-                    $(tabContent).find('tbody').append(tabContentItem)
+                    $(tabContent).find('tbody').append(createProductItem(i, false, val.IdItem, val.ItemName, val.Qty, val.UoM, val.Cost, val.StatusExp, val.LastUpdated))
                 })
 
-                $('#form-project-product .nav-tabs').append(tab)    
-                $('#form-project-product .tab-content').append(tabContent)    
+                $(tab).insertBefore('#nav-tab-summary')
+                $(tabContent).insertBefore('#tab-content-summary')
+
+                calcTotal()
             }
 
-            function createProductTab(x){
-                var productName = 'Produk '+(parseInt(x)+1)
+            function createProductItem(i, inputSelect, IdItem='', ItemName='', Qty='', UoM='-', Cost='0', StatusExp='', LastUpdated=''){
+                var statusAlert = ''
+                var lastUpdate = ''
 
-                var tab = $(`<li class='nav-item'>
-                                <a class='nav-link `+(x == 0? 'active' : '')+`' data-toggle='tab' href='#product_`+x+`'>`+productName+`</a>
-                            </li>`)
+                if(!inputSelect){
+                    var inputItem = $(`<label class='product_label-Item'>`+ItemName+`</label>
+                                    <input type='hidden' class='form-control product_input-IdItem' value='`+IdItem+`' placeholder='supposed to be hidden'>`)
+                }else{
+                    var inputItem = $(`<input class='form-control product_input-Item' placeholder='Item. . .'>
+                                        <input type='hidden' class='form-control product_input-IdItem' value='' placeholder='supposed to be hidden'>`)
+                }
 
-                $('#form-project-product .nav-tabs').append(tab)
+                if(StatusExp == 0){
+                    statusAlert = 'style=background-color:#fdd8d8'
+                    lastUpdate = LastUpdated
+                }
+
+                var totalCost = parseInt(Qty? Qty : 0) * parseInt(Cost? Cost : 0)
+
+                var tabContentItem = $(`<tr id='item_row-`+i+`' `+statusAlert+`>
+                                            <td class='align-middle text-center'>`+(parseInt(i)+1)+`</td>
+                                            <td class='align-middle product-item'></td>
+                                            <td  class='align-middle'>
+                                                <input type='number' class='form-control product_input-Qty calc isNumber' value='`+Qty+`'>
+                                            </td>
+                                            <td class='align-middle product_label-UoM'>
+                                                `+UoM+`
+                                            </t>
+                                            <td  class='align-middle'>
+                                                <textarea class='form-control product_input-Description' rows='3'></textarea>
+                                            </td>
+                                            <td  class='align-middle'>
+                                                <!-- <label class='product_label-TotalPrice'>Rp 123.123.123</label> -->
+                                                <small class='product_label-Cost'>`+numberFormat('Rp', Cost)+`</small>
+                                                <input type='text' class='form-control product_input-Cost calc text-right isNumber' value='`+totalCost+`' data-Cost='`+Cost+`'>
+                                                <small class='cost-exp'>`+lastUpdate+`</small>
+                                            </td>
+                                            <td  class='align-middle text-right'>
+                                                <button type='button' class='btn btn-danger product_removeitem'>
+                                                    <i class='fas fa-times'></i>
+                                                </button>
+                                            </td>
+                                        </tr>`)
+                tabContentItem.find('.product-item').append(inputItem)
+
+                return tabContentItem
             }
+
+            $('body').on('click', '.add-product-item', function(){
+                var parentTabProduct = $(this).parents('.tab-pane')
+                var lastNumber = (typeof $(parentTabProduct).find('.table-product-item tbody tr td:nth-child(1)').last().html() !== 'undefined'? 
+                                            parseInt($(parentTabProduct).find('.table-product-item tbody tr td:nth-child(1)').last().html()) 
+                                            : 0)
+
+                $(parentTabProduct).find('table tbody').append(createProductItem(lastNumber, 1))
+                itemTypeaheadInit($(parentTabProduct).find('#item_row-'+lastNumber+' .product_input-Item'))
+            })
+
+            $('body').on('keyup', '.product_input-Item', function(e){
+                if(e.keyCode == 46 || e.keyCode == 8) {
+                    $(this).parents(`tr[id^='item_row-']`).find('.product_input-Item').typeahead('val', '')
+                    $(this).parents(`tr[id^='item_row-']`).find('.product_input-IdItem').val('')
+                    $(this).parents(`tr[id^='item_row-']`).find('.product_label-UoM').text('-')
+                }
+            })
+
+            $('body').on('typeahead:change', '.product_input-Item', function(ev, suggestion) {
+                $(this).parents(`tr[id^='item_row-']`).find('.product_input-Item').typeahead(
+                    'val', 
+                    $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').attr('data-text')
+                )
+            })
+
+            $('body').on('typeahead:select', '.product_input-Item', function(ev, suggestion) {
+                if($('.product_input-IdItem[value='+suggestion.IdItem+']').length == 0){
+                    $(this).parents(`tr[id^='item_row-']`).find('.product_input-IdItem').val(suggestion.IdItem)
+                    $(this).parents(`tr[id^='item_row-']`).find('.product_input-IdItem').attr('value', suggestion.IdItem)
+                    $(this).parents(`tr[id^='item_row-']`).find('.product_label-UoM').text(suggestion.UoM)
+                    $(this).parents(`tr[id^='item_row-']`).find('.product_input-Qty').attr('value', 1)
+                    $(this).parents(`tr[id^='item_row-']`).find('.product_label-Cost').html(numberFormat('Rp', suggestion.Cost))
+                    $(this).parents(`tr[id^='item_row-']`).find('.product_input-Cost').val(suggestion.Cost)
+                    $(this).parents(`tr[id^='item_row-']`).find('.product_input-Cost').attr('value', suggestion.Cost)
+                    $(this).parents(`tr[id^='item_row-']`).find('.product_input-Cost').attr('data-cost', suggestion.Cost)
+
+                    if(suggestion.StatusExp == 0){
+                        $(this).parents('tr').attr('style','background-color:#fdd8d8')
+                        $(this).parents('tr').find('.cost-exp').html(suggestion.LastUpdated)
+                    }else{
+                        $(this).parents('tr').removeAttr('style')
+                        $(this).parents('tr').find('.cost-exp').html('')
+                    }
+                }else{
+                    alert('item sudah dipilih sebelumnya')
+                }
+
+                calcTotal()
+            })
+
+            function itemTypeaheadInit(inputTypeahead){
+                var src = new Bloodhound({
+                    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    remote: {
+                        url: '".Yii::$app->urlManager->createUrl('project/get-sales-item')."&q=%QUERY',
+                        wildcard: '%QUERY'
+                    }
+                })
+
+                inputTypeahead.typeahead(null, {
+                    name: 'name',
+                    display: 'Name',
+                    source: src
+                })
+            }
+
         // ===================== END SELECT 2 PRODUCT =====================
 
-		$('#btn-add-item').click(function(){
-            var lastNumber = (typeof $('#item-list tr td:nth-child(1)').last().html() !== 'undefined'? parseInt($('#item-list tr td:nth-child(1)').last().html()) : 0)
 
-            createItemRow(lastNumber)
-        })
+        // ===================== CALC PRICE =====================
+            $('body').on('keyup', '.product_input-TotalMargin', function(){
+                $('.product_input-TotaPercent').val('')
+                calcTotal()
+            })
 
-        $('body').on('keyup', '.item_input-ItemName', function(e){
-            if(e.keyCode == 46 || e.keyCode == 8) {
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-ItemName').typeahead('val', '')
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').val('')
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').attr('data-text', '')
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-ItemUoM').text('-')
-            }
-        })
+            $('body').on('keyup', '.product_input-TotaPercent', function(){
+                $('.product_input-TotalMargin').val('')
+                calcTotal()
+            })
 
-        $('body').on('typeahead:change', '.item_input-ItemName', function(ev, suggestion) {
-            $(this).parents(`tr[id^='item_row-']`).find('.item_input-ItemName').typeahead(
-                'val', 
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').attr('data-text')
-            )
-        })
+            function calcTotal(){
+                var marginPercent = parseInt($('.product_input-TotaPercent').val()? $('.product_input-TotaPercent').val() : 0)
+                var grandTotalMargin = parseInt($('.product_input-TotalMargin').val()? parseInt($('.product_input-TotalMargin').val()) : 0)
+                var grandTotalPrice = 0
+                var grandTotalCost = 0
 
-        $('body').on('typeahead:select', '.item_input-ItemName', function(ev, suggestion) {
-            if($('.item_input-IdItem[value='+suggestion.IdItem+']').length == 0){
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').val(suggestion.IdItem)
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').attr('value', suggestion.IdItem)
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').attr('data-text', suggestion.Name)
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-ItemUoM').text(suggestion.UoM)
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-Qty').attr('value', 1)
-                $(this).parents(`tr[id^='item_row-']`).find('.item_Price-label').html(numberFormat('', suggestion.Price))
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-Price').attr('value', suggestion.Price)
-                $(this).parents(`tr[id^='item_row-']`).find('.item_input-Price').attr('data-price', suggestion.Price)
+                $('.product_input-Cost').each(function(idx, val){
+                    grandTotalCost += parseInt($(this).val())
+                })
 
-                $('.calc').trigger('keyup')
-
-                if(suggestion.StatusPrice == 0){
-                    $(this).parents('tr').attr('style','background-color:#fdd8d8')
-                    $(this).parents('tr').find('.price-exp').html(suggestion.LastUpdated)
-                }else{
-                    $(this).parents('tr').removeAttr('style')
-                    $(this).parents('tr').find('.price-exp').html('')
+                if($('.product_input-TotaPercent').val()){
+                    grandTotalMargin = grandTotalCost * (marginPercent/100)
                 }
-            }else{
-                alert('item sudah dipilih sebelumnya')
-                // $(this).parents(`tr[id^='item_row-']`).find('.item_input-ItemName').typeahead('val', '')
-                // $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').val('')
-                // $(this).parents(`tr[id^='item_row-']`).find('.item_input-IdItem').attr('data-text', '')
-                // $(this).parents(`tr[id^='item_row-']`).find('.item_input-ItemUoM').text('-')
+
+                grandTotalPrice = grandTotalCost + grandTotalMargin
+
+                $('.product_input-TotalCost').val(grandTotalCost)
+                $('.product_input-TotalPrice').val(grandTotalPrice)
+
+                $('.product_label-TotalCost').html(numberFormat('', grandTotalCost))
+                $('.product_label-TotalMargin').html(numberFormat('', grandTotalMargin))
+                $('.product_label-TotalPrice').html(numberFormat('', grandTotalPrice))
             }
-        })
+
+            $('body').on('keyup', '.calc', function(){
+                var qty = $(this).parents('tr').find('.product_input-Qty').val()
+                var cost = $(this).parents('tr').find('.product_input-Cost').attr('data-cost')
+
+                qty = (qty ? parseFloat(qty):0);
+                cost = (cost ? parseInt(cost):0)
+
+                var totalCost = qty * cost
+
+                $(this).parents('tr').find('.product_input-Cost').val(totalCost)
+
+                calcTotal()
+            })
+        // ===================== END CALC PRICE =====================
 
 		// ================== FUNCTION ==================
             $('body').on('keypress', '.isNumber', function (evt){
@@ -339,34 +398,6 @@
                     return false;
                 }
                 return true;
-            })
-
-            $('body').on('keyup', '.calc', function(){
-                var qty = $(this).parents('tr').find('.item_input-Qty').val()
-                var price = $(this).parents('tr').find('.item_input-Price').attr('data-price')
-
-                qty = (qty ? parseFloat(qty):0);
-                price = (price ? parseInt(price):0)
-
-                var totalPrice = qty * price
-                var totalCost = 0
-                var grandTotal = 0
-                var margin = ($('.item_input-MarginNominal').val()? $('.item_input-MarginNominal').val() : 0)
-
-                $(this).parents('tr').find('.item_input-Price').val(totalPrice)
-                $(this).parents('tr').find('.item_Price-label').html(numberFormat('',totalPrice))
-
-                $('.item_input-Price').each(function(){
-                    totalCost += parseInt($(this).val())
-                })
-
-                grandTotal += parseInt(margin) + parseInt(totalCost)
-
-                $('.item_input-TotalCost').val(totalCost)
-                $('.item_label-TotalCost').html(numberFormat('', totalCost))
-
-                $('.item_input-GrandTotal').val(grandTotal)
-                $('.item_GrandTotal-label').html(numberFormat('', grandTotal))
             })
 
             $('body').on('click', '.item_remove', function(){
@@ -391,56 +422,6 @@
 
                 $('.calc').trigger('keyup')
             })
-
-			function createItemRow(lastNumber, itemName = '', idItem = '', qty = '', price = ''){
-                var itemContent = $(`<tr id='item_row-`+lastNumber+`'>
-					    				<td>`+parseInt(lastNumber+1)+`</td>
-					    				<td>
-					    					<input class='form-control item_input-ItemName' name='ProjectItem[`+lastNumber+`][ItemName]' placeholder='Item. . .' value='`+itemName+`' data-text='`+itemName+`'>
-					    					<input type='hidden' class='form-control item_input-IdItem' placeholder='this supposed to be hidden' name='ProjectItem[`+lastNumber+`][IdItem]' value='`+idItem+`'>
-					    				</td>
-					    				<td>
-					    					<div class='input-group mb-3'>
-												<input class='form-control item_input-Qty isNumber calc' name='ProjectItem[`+lastNumber+`][Qty]' placeholder='Qty. . .' value='`+qty+`'>
-												<div class='input-group-append'>
-													<span class='input-group-text item_input-ItemUoM'>-</span>
-												</div>
-											</div>
-					    				</td>
-					    				<td class='text-right'>
-                                            <label class='item_Price-label'></label>
-                                            <br>
-                                            <small class='price-exp'></small>
-					    					<input type='hidden' class='form-control item_input-Price isNumber calc' name='ProjectItem[`+lastNumber+`][Price]' placeholder='Price. . .' value='`+price+`' data-price='`+price+`'>
-					    				</td>
-					    				<td>
-					    					<button type='button' class='btn btn-danger item_remove'>
-				                                <i class='fas fa-times'></i>
-				                            </button>
-					    				</td>
-					    			</tr>`)
-
-                $('#form-sales-item #item-list').append(itemContent)
-
-                itemTypeaheadInit($('#item_row-'+lastNumber+' .item_input-ItemName'))
-            }
-
-			function itemTypeaheadInit(inputTypeahead){
-                var src = new Bloodhound({
-                    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    remote: {
-                        url: '".Yii::$app->urlManager->createUrl('project/get-sales-item')."&q=%QUERY',
-                        wildcard: '%QUERY'
-                    }
-                })
-
-                inputTypeahead.typeahead(null, {
-                    name: 'name',
-                    display: 'Name',
-                    source: src
-                })
-            }
         // ================== END FUNCTION ==================
 	";
 

@@ -43,7 +43,7 @@ class ProjectController extends Controller{
 													supplier_item.Id IdSupplierItem, idSupplier__r.Id IdSupplier, idSupplier__r.Name SupplierName,
 													supplier_item.Price LastPrice, supplier_item.LastUpdated LastUpdated,
 													supplierItemCost__r.Price PurchasePrice, supplierItemCost__r.Created_At PurchaseAt,
-													if(supplier_item.LastUpdated BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() OR supplierItemCost__r.Created_At BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW(), 1, 0) StatusPrice
+													if(supplier_item.LastUpdated BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() OR supplierItemCost__r.Created_At BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW(), 1, 0) StatusExp
 											FROM `supplier_item` 
 											LEFT JOIN `item` `item__r` ON supplier_item.IdItem = item__r.Id 
 											LEFT JOIN `item_unit` `itemUnit__r` ON item__r.IdUoM = itemUnit__r.Id 
@@ -63,7 +63,7 @@ class ProjectController extends Controller{
 
     	$out = [];
     	foreach ($data as $d) {
-            $out[] = ['IdItem' => $d['IdItem'], 'IdSupplierItem' => $d['IdSupplierItem'], 'Name' => $d['ItemName'], 'UoM' => $d['UoM'], 'Price' => $d['LastPrice'], 'StatusPrice' => $d['StatusPrice'], 'LastUpdated' => date('d-m-Y'), strtotime($d['LastUpdated'])];
+            $out[] = ['IdItem' => $d['IdItem'], 'IdSupplierItem' => $d['IdSupplierItem'], 'Name' => $d['ItemName'], 'UoM' => $d['UoM'], 'Cost' => $d['LastPrice'], 'StatusExp' => $d['StatusExp'], 'LastUpdated' => date('d-m-Y', strtotime($d['LastUpdated']))];
         }
 
         echo Json::encode($out);
@@ -88,21 +88,67 @@ class ProjectController extends Controller{
 	}
 
 	public function actionGetAllProduct($q=null){
-		$model = Product::find()->where('Name LIKE "%'.$q.'%" AND Status = 1')->all();
+		$query = Yii::$app->db->createCommand('SELECT item__r.Id IdItem, item__r.Name ItemName, itemUnit__r.UoM, 
+												productItem__r.Qty, productItem__r.Id IdPrdItem, product__r.Id IdPrd, product__r.Name PrdName,
+												supplier_item.Id IdSupplierItem, idSupplier__r.Id IdSupplier, idSupplier__r.Name SupplierName,
+												supplier_item.Price LastPrice, supplier_item.LastUpdated LastUpdated,
+												supplierItemCost__r.Price PurchasePrice, supplierItemCost__r.Created_At PurchaseAt,
+												if(supplier_item.LastUpdated BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() OR supplierItemCost__r.Created_At BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW(), 1, 0) StatusExp
+										FROM `supplier_item` 
+										LEFT JOIN `item` `item__r` ON supplier_item.IdItem = item__r.Id 
+										LEFT JOIN `item_unit` `itemUnit__r` ON item__r.IdUoM = itemUnit__r.Id 
+										LEFT JOIN `supplier_item_cost` `supplierItemCost__r` ON supplier_item.Id = supplierItemCost__r.IdSupplierItem 
+										LEFT JOIN `supplier` `idSupplier__r` ON supplier_item.IdSupplier = idSupplier__r.Id 
+										LEFT JOIN `product_item` `productItem__r` on productItem__r.IdItem = item__r.Id
+										LEFT JOIN `product` `product__r` on product__r.Id = productItem__r.IdProduct
+										WHERE 
+											-- product__r.Id = 3
+											product__r.Name LIKE "%'.$q.'%"
+										AND supplier_item.LastUpdated = (
+										    SELECT MAX(supplier_item2.LastUpdated)
+										    FROM supplier_item supplier_item2
+										    WHERE supplier_item.IdItem = supplier_item2.IdItem
+										) 
+										-- GROUP BY `item__r`.`Id` 
+										-- ORDER BY `supplier_item`.`LastUpdated` DESC, `supplierItemCost__r`.`Created_At` DESC, `item__r`.`Name`')->queryAll();
+
 		$data = [];
+		$idx = 0;
+    	foreach ($query as $d) {
+    		if(!array_search($d['IdPrd'], array_column($data, 'id'))){
+    			$data[$idx] = ['id' => $d['IdPrd'], 'text' => $d['PrdName']]; 
+    			$listItemCounter = 0;
 
-		foreach($model as $mdl){
-			$item = [];
-			foreach($mdl->itemProduct__r as $idx => $prdItem){
-				$item[$idx]['Id'] = $prdItem->Id;
-				$item[$idx]['IdItem'] = $prdItem->IdItem;
-				$item[$idx]['ItemName'] = $prdItem->item__r->Name;
-				$item[$idx]['UoM'] = $prdItem->item__r->itemUnit__r->UoM;
-				$item[$idx]['Qty'] = $prdItem->Qty;
-			}
+    			$data[$idx]['listitem'][$listItemCounter] = [
+    				'Id' => $d['IdPrdItem'],
+    				'IdItem' => $d['IdItem'],
+    				'ItemName' => $d['ItemName'],
+    				'UoM' => $d['UoM'],
+    				'Qty' => $d['Qty'],
+    				'Cost' => $d['LastPrice'],
+    				'StatusExp' => $d['StatusExp'],
+    				'LastUpdated' => date('d-m-Y', strtotime($d['LastUpdated']))
+    			];
 
-			$data[] = ['id' => $mdl->Id, 'text' => $mdl->Name, 'listitem' => $item]; 
-		}
+    			$idx++;
+    			$listItemCounter++;
+    		}else{
+    			$idx = array_search($d['IdPrd'], array_column($data, 'id'));
+
+    			$data[$idx]['listitem'][$listItemCounter] = [
+    				'Id' => $d['IdPrdItem'],
+    				'IdItem' => $d['IdItem'],
+    				'ItemName' => $d['ItemName'],
+    				'UoM' => $d['UoM'],
+    				'Qty' => $d['Qty'],
+    				'Cost' => $d['LastPrice'],
+    				'StatusExp' => $d['StatusExp'],
+    				'LastUpdated' => date('d-m-Y', strtotime($d['LastUpdated']))
+    			];
+
+    			$listItemCounter++;
+    		}
+        }
 
 		echo Json::encode($data);
 		die;
