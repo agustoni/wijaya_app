@@ -14,6 +14,7 @@ use backend\models\Item;
 use backend\models\ItemUnit;
 use backend\models\SupplierItem;
 use backend\models\ProjectWorker;
+use backend\models\Product;
 
 class ProjectController extends Controller{
 	public function actionIndex(){
@@ -34,36 +35,10 @@ class ProjectController extends Controller{
 	}
 
 	public function actionTestModul(){
-		return $this->render('_detail-item');
+		return $this->render('test-modul');
 	}
 
 	public function actionGetSalesItem($q){
-// ==================================================================================================================
-		// $query = new Query;
-  //       $query->select('item__r.Id IdItem, item__r.Name ItemName, itemUnit__r.UoM, 
-		// idSupplier__r.Id IdSupplier, idSupplier__r.Name SupplierName,
-		// supplier_item.Price LastPrice, supplier_item.LastUpdated LastUpdated,
-		// supplierItemCost__r.Price PurchasePrice, supplierItemCost__r.Created_At PurchaseAt,
-		// if((supplier_item.LastUpdated BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW()) OR (supplierItemCost__r.Created_At BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW()), "1", "0") StatusPrice')
-  //             ->from('supplier_item')
-  //             ->leftJoin('item item__r', 'supplier_item.IdItem = item__r.Id')
-  //             ->leftJoin('item_unit itemUnit__r', 'item__r.IdUoM = itemUnit__r.Id')
-  //             ->leftJoin('supplier_item_cost supplierItemCost__r', 'supplier_item.Id = supplierItemCost__r.IdSupplierItem')
-  //             ->leftJoin('supplier idSupplier__r', 'supplier_item.IdSupplier = idSupplier__r.Id')
-  //             ->where('item__r.Name LIKE "%'.$q.'%" 
-  //             			/*AND (
-		// 				    supplier_item.LastUpdated BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW()
-		// 					OR supplierItemCost__r.Created_At BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW()
-		// 				)*/
-		// 				AND supplier_item.LastUpdated = (
-		// 					SELECT MAX(supplier_item2.LastUpdated)
-		// 				    FROM supplier_item supplier_item2
-		// 				    WHERE supplier_item.IdItem = supplier_item2.IdItem
-		// 				)')
-  //             ->groupBy('item__r.Id')
-  //             ->orderBy('item__r.Name ASC, supplier_item.LastUpdated DESC, supplierItemCost__r.Created_At DESC');
-  //       $data = $query->createCommand()->queryAll();
-// ==================================================================================================================
 		$data = Yii::$app->db->createCommand('SELECT item__r.Id IdItem, item__r.Name ItemName, itemUnit__r.UoM, 
 													supplier_item.Id IdSupplierItem, idSupplier__r.Id IdSupplier, idSupplier__r.Name SupplierName,
 													supplier_item.Price LastPrice, supplier_item.LastUpdated LastUpdated,
@@ -110,6 +85,27 @@ class ProjectController extends Controller{
         // echo "<pre>";
         // print_r($worker);
         die;
+	}
+
+	public function actionGetAllProduct($q=null){
+		$model = Product::find()->where('Name LIKE "%'.$q.'%" AND Status = 1')->all();
+		$data = [];
+
+		foreach($model as $mdl){
+			$item = [];
+			foreach($mdl->itemProduct__r as $idx => $prdItem){
+				$item[$idx]['Id'] = $prdItem->Id;
+				$item[$idx]['IdItem'] = $prdItem->IdItem;
+				$item[$idx]['ItemName'] = $prdItem->item__r->Name;
+				$item[$idx]['UoM'] = $prdItem->item__r->itemUnit__r->UoM;
+				$item[$idx]['Qty'] = $prdItem->Qty;
+			}
+
+			$data[] = ['id' => $mdl->Id, 'text' => $mdl->Name, 'listitem' => $item]; 
+		}
+
+		echo Json::encode($data);
+		die;
 	}
 
 	public function actionDeleteProjectContact(){

@@ -19,6 +19,20 @@
 	#form-sales-item td:nth-child(4){width: 15%;}
 	#form-sales-item td:nth-child(5){width: 15%;}
     .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {color: #ffffff;background-color: #17a2b8;border-color: #dee2e6 #dee2e6 #fff;}
+
+    .table-product-item td:nth-child(1){width: 6%}
+    .table-product-item td:nth-child(2){width: 18%}
+    .table-product-item td:nth-child(3){width: 15%}
+    .table-product-item td:nth-child(4){width: 11%}
+    .table-product-item td:nth-child(5){width: 25%}
+    .table-product-item td:nth-child(6){width: 18%}
+    .table-product-item td:nth-child(7){width: 7%}
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 </style>
 
 <div class="card card-light mb-3" id="project-amount-container">
@@ -34,7 +48,7 @@
         </div>
         <hr>
 
-    	<table class="table table-borderless table-sm" id="form-sales-item">
+    	<!-- <table class="table table-borderless table-sm" id="form-sales-item">
     		<thead>
     			<tr>
     				<th>#</th>
@@ -68,30 +82,22 @@
                         <b>Margin</b>
                     </td>
                     <td class="text-right">
-                        <!-- <div class="row"> -->
-                            <!-- <div class="col-md"> -->
-                                <div class="input-group mb-3 btn-margin-type d-none">
-                                    <div class="input-group-prepend">
-                                        <button class="btn btn-secondary btn-margin-type" data-type="nominal">
-                                            Num
-                                        </button>
-                                    </div>
-                                    <!-- <input class="form-control item_input-Margin text-right" placeholder="Margin. . ."> -->
-                                </div>
-                                <div class="input-group mb-3 btn-margin-type">
-                                    <div class="input-group-prepend">
-                                        <button class="btn btn-secondary btn-margin-type" data-type="persen">
-                                            %
-                                        </button>
-                                        <input class="form-control item_input-MarginPercent" >
-                                    </div>
-                                    <!-- <input class="form-control item_input-Margin text-right" placeholder="Margin. . ."> -->
-                                </div>
-                            <!-- </div> -->
-                            <!-- <div class="col-md"> -->
-                                <input type="" class="form-control item_input-MarginNominal text-right" placeholder="Margin. . .">
-                            <!-- </div> -->
-                        <!-- </div> -->
+                        <div class="input-group mb-3 btn-margin-type d-none">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-secondary btn-margin-type" data-type="nominal">
+                                    Num
+                                </button>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3 btn-margin-type">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-secondary btn-margin-type" data-type="persen">
+                                    %
+                                </button>
+                                <input class="form-control item_input-MarginPercent" >
+                            </div>
+                        </div>
+                        <input type="" class="form-control item_input-MarginNominal text-right" placeholder="Margin. . .">
                     </td>
                 </tr>
                 <tr style="background-color:#eee">
@@ -104,14 +110,77 @@
                     </td>
                 </tr>
             </tbody>
-    	</table>
+    	</table> -->
+
+        <!-- ================================================================= --> 
+        <div id="form-project-product">
+            <ul class="nav nav-tabs" role="tablist">
+                <!-- <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#product_1">Product 1</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#product_2">Product 2</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#product_3">Product 3</a>
+                </li> -->
+            </ul>
+            <div class="tab-content">
+                <!-- <div id="product_1" class="tab-pane active"><br>
+                    <h3 class='product_label-ProductName'>LIFT ACX-BR3</h3>
+
+                    <table class='table table-borderless table-sm table-product-item'>
+                        <thead>
+                            <th>#</th>
+                            <th>Item</th>
+                            <th>Qty</th>
+                            <th>Deskripsi</th>
+                            <th>Total</th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class='align-middle'>1</td>
+                                <td class='align-middle'>
+                                    <label class='product_label-Item'>Item 1</label>
+                                    <input type='text' class='form-control product_input-IdItem' placeholder='supposed to be hidden'>
+                                </td>
+                                <td  class='align-middle'>
+                                    <input type='number' class='form-control product-input-Qty'>
+                                </td>
+                                <td  class='align-middle'>
+                                    <textarea class='form-control product_input-Description' rows='3'></textarea>
+                                </td>
+                                <td  class='align-middle'>
+                                    <label class='product_label-Price'>Rp 123.123.123</label>
+                                    <input type='text' class='form-control product_input-Price' placeholder='supposed to be hidden'>
+                                </td>
+                                <td  class='align-middle'>
+                                    <button type='button' class='btn btn-danger product_removeitem'>
+                                        <i class='fas fa-times'></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="product_2" class="container tab-pane fade"><br>
+                    <h3>Menu 1</h3>
+                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                </div>
+                <div id="product_3" class="container tab-pane fade"><br>
+                    <h3>Menu 2</h3>
+                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                </div> -->
+            </div>
+        </div>
     </div>
 </div>
 <?php 
 	$scriptDetailItem = "
 		$(document).ready(function(){
 			itemTypeaheadInit($('.item_input-ItemName'))
-            createItemRow(0)
+            // createItemRow(0)
 		})
 
         // ===================== SELECT 2 PRODUCT =====================
@@ -137,7 +206,77 @@
                 // }
 
                 $('.select2-product-input').val(null).trigger('change')
+
+                createProduct(selected)
             })
+
+            function createProduct(data){
+                var x = $('#form-project-product .nav-tabs li').length
+                var productName = 'Produk '+(parseInt(x)+1)
+                var tab = $(`<li class='nav-item'>
+                                <a class='nav-link `+(x == 0? 'active' : '')+`' data-toggle='tab' href='#product_`+x+`'>`+productName+`</a>
+                            </li>`)
+
+                var tabContent = $(`<div id='product_`+x+`' class='tab-pane `+(x == 0? 'active' : '')+`'>
+                                        <h3 class='product_label-ProductName'>`+data.text+`</h3>
+                                        <table class='table table-borderless table-sm table-product-item'>
+                                            <thead>
+                                                <th>#</th>
+                                                <th>Item</th>
+                                                <th>Qty</th>
+                                                <th>UoM</th>
+                                                <th>Deskripsi</th>
+                                                <th>Total</th>
+                                                <th></th>
+                                            </thead>
+                                            <tbody>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>`)
+
+                $(data.listitem).each(function(i, val){
+                    var tabContentItem = $(`<tr>
+                                                <td class='align-middle'>`+(parseInt(i)+1)+`</td>
+                                                <td class='align-middle'>
+                                                    <label class='product_label-Item'>`+val.ItemName+`</label>
+                                                    <input type='text' class='form-control product_input-IdItem' value='`+val.IdItem+`' placeholder='supposed to be hidden'>
+                                                </td>
+                                                <td  class='align-middle'>
+                                                    <input type='number' class='form-control product-input-Qty' value='`+val.Qty+`'>
+                                                </td>
+                                                <th>
+                                                    `+val.UoM+`
+                                                </th>
+                                                <td  class='align-middle'>
+                                                    <textarea class='form-control product_input-Description' rows='3'></textarea>
+                                                </td>
+                                                <td  class='align-middle'>
+                                                    // <label class='product_label-Price'>Rp 123.123.123</label>
+                                                    <input type='text' class='form-control product_input-Price'>
+                                                </td>
+                                                <td  class='align-middle'>
+                                                    <button type='button' class='btn btn-danger product_removeitem'>
+                                                        <i class='fas fa-times'></i>
+                                                    </button>
+                                                </td>
+                                            </tr>`);
+                    $(tabContent).find('tbody').append(tabContentItem)
+                })
+
+                $('#form-project-product .nav-tabs').append(tab)    
+                $('#form-project-product .tab-content').append(tabContent)    
+            }
+
+            function createProductTab(x){
+                var productName = 'Produk '+(parseInt(x)+1)
+
+                var tab = $(`<li class='nav-item'>
+                                <a class='nav-link `+(x == 0? 'active' : '')+`' data-toggle='tab' href='#product_`+x+`'>`+productName+`</a>
+                            </li>`)
+
+                $('#form-project-product .nav-tabs').append(tab)
+            }
         // ===================== END SELECT 2 PRODUCT =====================
 
 		$('#btn-add-item').click(function(){
