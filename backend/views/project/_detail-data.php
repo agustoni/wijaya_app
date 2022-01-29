@@ -1,11 +1,10 @@
 <?php 
     use yii\helpers\Html;
-
-    $this->registerJsFile("https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js",[
-        'depends' => [
-            \yii\web\JqueryAsset::className()
-        ],
-        'position' => \yii\web\View::POS_END
+    
+    $this->registerJsFile("@web/web/js/ckeditor/ckeditor.js", [
+        'depends'=> [
+            \yii\bootstrap4\BootstrapAsset::className()
+        ]
     ]);
 ?>
 <style>
