@@ -46,8 +46,9 @@
 </div>
 <?php
     $scriptProjectFormClient = "
-    	$(document).ready(function(){
+    	// $(document).ready(function(){
 	    	if(actionId == 'create'){
+	    		console.log('asd')
 	    		createContactRow(0)
 	    	}
 
@@ -144,7 +145,7 @@
 
 	    		$('#project-contact-list').append(contactRowContent)
 	    	}
-	    })
+	    // })
     ";
 
     $this->registerJs($scriptProjectFormClient, \yii\web\View::POS_END);

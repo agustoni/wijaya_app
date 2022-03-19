@@ -26,7 +26,7 @@
     	<div class="form-row my-2">
 			<div class="col-md-6">
 				<label class="font-weight-bold">Tipe Project</label>
-				<select class="form-control" name="Project[Detail]['IdProjectType']">
+				<select class="form-control project_detail_input-IdProjectType" name="Project[Detail]['IdProjectType']">
 					<option value="">- Tipe Project -</option>
 					<?php foreach($projectType as $pt): ?>
 						<option value="<?= $pt->Id ?>"><?= $pt->Type ?></option>

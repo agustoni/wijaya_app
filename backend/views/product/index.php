@@ -53,19 +53,15 @@
         </div>
 	</div>
 </div>
-<?php
-	$scriptProduct="
-        $(document).ready(function(){
-            $.fn.dataTable.moment( 'MMM D, Y' );
-            
-            $('#dataTable').DataTable({
-                'columnDefs': [
-                    {'orderable': true, 'targets': 4 }
-                  ],
-                'aaSorting': []
-            });
-        })
-    ";
-
-	$this->registerJs($scriptProduct, \yii\web\View::POS_END, 'script-product');
-?>
+<script>
+    $(document).ready(function(){
+        $.fn.dataTable.moment( 'MMM D, Y' );
+        
+        $('#dataTable').DataTable({
+            'columnDefs': [
+                {'orderable': true, 'targets': 2 }
+              ],
+            'aaSorting': []
+        });
+    })
+</script>

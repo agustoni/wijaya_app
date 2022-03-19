@@ -59,9 +59,6 @@
             </ul>
             <div class="tab-content">
                 <div id="tab-content-summary" class='tab-pane active'>
-                    <!-- <h3 class='product_label-ProductName'>asdasd</h3>
-                    <hr> -->
-                    
                     <table class="table table-striped table-summary table-sm">
                         <thead>
                             <tr>
@@ -73,48 +70,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Lift 1</td>
-                                <td>Rp 3.000.000</td>
-                                <td>Rp 5.000.000</td>
-                                <td>Rp 2.000.000</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Lift 2</td>
-                                <td>Rp 3.000.000</td>
-                                <td>Rp 5.000.000</td>
-                                <td>Rp 2.000.000</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Lift 3</td>
-                                <td>Rp 3.000.000</td>
-                                <td>Rp 5.000.000</td>
-                                <td>Rp 2.000.000</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Lift 4</td>
-                                <td>Rp 3.000.000</td>
-                                <td>Rp 5.000.000</td>
-                                <td>Rp 2.000.000</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>Lift 5</td>
-                                <td>Rp 3.000.000</td>
-                                <td>Rp 5.000.000</td>
-                                <td>Rp 2.000.000</td>
+                            <tr id="empty-summary">
+                                <th colspan=5 class="text-center">Produk masih kosong</th>
                             </tr>
                         </tbody>
-                        <tfoot class='bg-success text-white'>
+                        <tfoot class='bg-success text-white d-none'>
                             <tr>
                                 <th colspan=2 class="text-center">Total</th>
-                                <th>Rp 15.000.000</th>
-                                <th>Rp 25.000.000</th>
-                                 <th>Rp 10.000.000</th>
+                                <th class='product-total-cost'></th>
+                                <th class='product-total-price'></th>
+                                <th class='product-total-margin'></th>
                             </tr>
                         </tfoot>
                     </table>
@@ -141,14 +106,11 @@
             $('.select2-product-input').on('select2:select', function (e) {
                 var selected = e.params.data
 
-                console.log(selected)
-
                 $('.select2-product-input').val(null).trigger('change')
-
                 createProduct(selected)
             })
 
-            function createProduct(data){
+            function createProduct(data, totalCost='', totalMargin='', totalPrice=''){
                 $('#form-project-product .nav-link').removeClass('active')
                 $('#form-project-product .tab-pane').removeClass('active')
 
@@ -179,7 +141,7 @@
                                                     <th colspan=5 class='align-middle text-right'>Modal</th>
                                                     <th colspan=2 class='align-middle text-right'>
                                                         <label class='product_label-TotalCost '></label>
-                                                        <!-- <input class='form-control product_input-TotalCost text-right'> -->
+                                                        <input type='hidden' class='form-control product_input-TotalCost text-right'>
                                                     </th>
                                                 </tr>
                                                 <tr>
@@ -211,8 +173,13 @@
                                     </div>`)
 
                 $(data.listitem).each(function(i, val){
-                    $(tabContent).find('tbody').append(createProductItem(i, false, val.IdItem, val.ItemName, val.Qty, val.UoM, val.Cost, val.StatusExp, val.LastUpdated))
+                    $(tabContent).find('tbody').append(createProductItem(i, false, val.IdItem, val.ItemName, val.Qty, val.UoM, val.Cost, val.StatusExp, val.LastUpdated, totalCost, totalMargin, totalPrice))
                 })
+
+                if(totalMargin != ''){
+                    $(tabContent).find('.product_input-TotalMargin').val(totalMargin)
+                    $(tabContent).find('.product_label-TotalMargin').html(numberFormat('', totalMargin))
+                }
 
                 $(tab).insertBefore('#nav-tab-summary')
                 $(tabContent).insertBefore('#tab-content-summary')
@@ -220,7 +187,7 @@
                 calcTotal()
             }
 
-            function createProductItem(i, inputSelect, IdItem='', ItemName='', Qty='', UoM='-', Cost='0', StatusExp='', LastUpdated=''){
+            function createProductItem(i, inputSelect, IdItem='', ItemName='', Qty='', UoM='-', Cost='0', StatusExp='', LastUpdated='', totalCost='', totalMargin='', totalPrice=''){
                 var statusAlert = ''
                 var lastUpdate = ''
 
@@ -267,6 +234,48 @@
 
                 return tabContentItem
             }
+
+            $('body').on('click', '#nav-tab-summary', function(){
+                $('.table-summary tbody').find('tr').not('#empty-summary').remove()
+
+                var grandTotalCost = 0
+                var grandTotalMargin = 0
+                var grandTotalPrice = 0
+
+                $('.tab-content div[id^=product_]').each(function(idx){
+                    var productName = $(this).find('.product_label-ProductName').html()
+                    var productTotalCost = $(this).find('.product_input-TotalCost').val()
+                    var productTotalPrice = $(this).find('.product_input-TotalPrice').val()
+                    var productTotalMargin = ($(this).find('.product_input-TotalMargin').val() ? $(this).find('.product_input-TotalMargin').val() : 0)
+
+                    var summaryTbody = $(`<tr>
+                                            <td>`+(parseInt(idx)+1)+`</td>
+                                            <td>`+productName+`</td>
+                                            <td>`+numberFormat('Rp ', productTotalCost)+`</td>
+                                            <td>`+numberFormat('Rp ', productTotalPrice)+`</td>
+                                            <td>`+numberFormat('Rp ', productTotalMargin)+`</td>
+                                          </tr>`)
+                    $('.table-summary tbody').append(summaryTbody)
+
+                    grandTotalCost += parseInt(productTotalCost)
+                    grandTotalMargin += parseInt((productTotalMargin ? productTotalMargin : 0))
+                    grandTotalPrice += parseInt(productTotalPrice)
+                })
+
+                // create summary tfoot
+                    if(grandTotalCost > 0 || grandTotalCost > 0 || grandTotalCost > 0){
+                        $('.table-summary tfoot').removeClass('d-none')
+                        $('#empty-summary').addClass('d-none')
+
+                        $('.table-summary tfoot .product-total-cost').html(numberFormat('Rp ', grandTotalCost))
+                        $('.table-summary tfoot .product-total-price').html(numberFormat('Rp ', grandTotalPrice))
+                        $('.table-summary tfoot .product-total-margin').html(numberFormat('Rp ', grandTotalMargin))
+                    }else{
+                        $('.table-summary tfoot').addClass('d-none')
+                        $('#empty-summary').removeClass('d-none')
+                    }
+                // END create summary tfoot
+            })
 
             $('body').on('click', '.add-product-item', function(){
                 var parentTabProduct = $(this).parents('.tab-pane')
@@ -337,7 +346,6 @@
 
         // ===================== END SELECT 2 PRODUCT =====================
 
-
         // ===================== CALC PRICE =====================
             $('body').on('keyup', '.product_input-TotalMargin', function(){
                 $('.product_input-TotaPercent').val('')
@@ -350,27 +358,33 @@
             })
 
             function calcTotal(){
-                var marginPercent = parseInt($('.product_input-TotaPercent').val()? $('.product_input-TotaPercent').val() : 0)
-                var grandTotalMargin = parseInt($('.product_input-TotalMargin').val()? parseInt($('.product_input-TotalMargin').val()) : 0)
-                var grandTotalPrice = 0
-                var grandTotalCost = 0
+                $('.tab-content div[id^=product_]').each(function(){
+                    var marginPercent = parseInt($(this).find('.product_input-TotaPercent').val()? $(this).find('.product_input-TotaPercent').val() : 0)
+                    var grandTotalMargin = parseInt($(this).find('.product_input-TotalMargin').val()? parseInt($(this).find('.product_input-TotalMargin').val()) : 0)
+                    var grandTotalPrice = 0
+                    var grandTotalCost = 0
 
-                $('.product_input-Cost').each(function(idx, val){
-                    grandTotalCost += parseInt($(this).val())
+                    $(this).find('.product_input-Cost').each(function(idx, val){
+                        grandTotalCost += parseInt($(this).val())
+                    })
+
+                    if($(this).find('.product_input-TotaPercent').val()){
+                        grandTotalMargin = grandTotalCost * (marginPercent/100)
+                    }
+
+                    grandTotalPrice = grandTotalCost + grandTotalMargin
+
+                    $(this).find('.product_input-TotalCost').val(grandTotalCost)
+                    $(this).find('.product_input-TotalPrice').val(grandTotalPrice)
+
+                    $(this).find('.product_label-TotalCost').html(numberFormat('', grandTotalCost))
+                    // $(this).find('.product_label-TotalMargin').html(numberFormat('', grandTotalMargin))
+                    $(this).find('.product_label-TotalPrice').html(numberFormat('', grandTotalPrice))
+
+                    $(this).find('.product_input-TotalCost').html(numberFormat('', grandTotalCost))
+                    $(this).find('.product_input-TotalMargin').html(numberFormat('', grandTotalMargin))
+                    $(this).find('.product_input-TotalPrice').html(numberFormat('', grandTotalPrice))
                 })
-
-                if($('.product_input-TotaPercent').val()){
-                    grandTotalMargin = grandTotalCost * (marginPercent/100)
-                }
-
-                grandTotalPrice = grandTotalCost + grandTotalMargin
-
-                $('.product_input-TotalCost').val(grandTotalCost)
-                $('.product_input-TotalPrice').val(grandTotalPrice)
-
-                $('.product_label-TotalCost').html(numberFormat('', grandTotalCost))
-                $('.product_label-TotalMargin').html(numberFormat('', grandTotalMargin))
-                $('.product_label-TotalPrice').html(numberFormat('', grandTotalPrice))
             }
 
             $('body').on('keyup', '.calc', function(){

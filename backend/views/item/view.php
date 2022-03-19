@@ -26,11 +26,7 @@
 	    </div>
 	</div>
 </div>
-<?php 
-	$scriptItemView="
-        var dataItemPart = ".($itemPart != null? $itemPart : 'null')."
-		var urlSaveItem = '".Yii::$app->urlManager->createUrl(["item/save-item", 'id' => $_GET['id']])."'
-    ";
-
-    $this->registerJs($scriptItemView, \yii\web\View::POS_END);
-?>
+<script>
+    var dataItemPart = "<?= ($itemPart != null? $itemPart : 'null') ?>"
+	var urlSaveItem = '<?= Yii::$app->urlManager->createUrl(["item/save-item", 'id' => $_GET['id']]) ?>'
+</script>

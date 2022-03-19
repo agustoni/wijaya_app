@@ -100,7 +100,7 @@
         //     createWorkerRow(lastNumber)
         // })
 
-        function createWorkerRow(lastNumber, idWorker = '', name = '', role = '', startAt = ''){
+        function createWorkerRow(lastNumber, idWorker = '', name = '', role = '', startAt = '', statusDate=''){
             var optionRole = ''
 
             $(workerRole).each(function(idx, val){
@@ -120,7 +120,7 @@
                                         </select> 
                                     </td>
                                     <td>
-                                        <input class='form-control worker_input-StartAt datepicker' name='ProjectItem[`+lastNumber+`][StartAt]' placeholder='Mulai bekerja. . .' value=`+startAt+`>
+                                        <input class='form-control worker_input-StartAt datepicker' name='ProjectItem[`+lastNumber+`][StartAt]' placeholder='Mulai bekerja. . .' value=`+startAt+` `+(statusDate == 0? 'disabled' : '')+`>
                                     </td>
                                     <td>
                                         <button type='button' class='btn btn-danger worker_remove'>
