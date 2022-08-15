@@ -255,7 +255,7 @@ $(document).ready(function(){
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
-                url: '<?= Yii::$app->urlManager->createUrl('item/get-all-item')."&q=%QUERY" ?>',
+                url: '<?= Yii::$app->urlManager->createUrl('item/get-all-item')."?q=%QUERY" ?>',
                 wildcard: '%QUERY'
             }
         })
@@ -315,7 +315,7 @@ $(document).ready(function(){
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
-                url: '<?= Yii::$app->urlManager->createUrl('item/get-all-item-combined')."&q=%QUERY" ?>',
+                url: '<?= Yii::$app->urlManager->createUrl('item/get-all-item-combined')."?q=%QUERY" ?>',
                 wildcard: '%QUERY'
             }
         })

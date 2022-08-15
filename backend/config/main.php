@@ -67,14 +67,19 @@ return [
         // 'FormatingNumber' => [
         //     'class' => 'backend\components\FormatingNumber',
         // ],
-        /*
+        
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '<controller:\w+>/<id:\d+>' => '<controller>/view',
+                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+
+                '<module:\w+>/<controller:\w+>/<action:\w+>/<id:\d+>'=>'<module>/<controller>/<action>',
             ],
         ],
-        */
+        
     ],
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',

@@ -99,7 +99,7 @@
                     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
                     queryTokenizer: Bloodhound.tokenizers.whitespace,
                     remote: {
-                        url: '<?= Yii::$app->urlManager->createUrl('item/get-uom')."&q=%QUERY" ?>',
+                        url: '<?= Yii::$app->urlManager->createUrl('item/get-uom')."?q=%QUERY" ?>',
                         wildcard: '%QUERY'
                     }
                 })

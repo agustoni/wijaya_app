@@ -31,7 +31,7 @@ class SupplierItem extends \yii\db\ActiveRecord{
         return $this->hasOne(Item::className(), ['Id' => 'IdItem']);
     }
 
-    public function getIdSupplier__r(){
+    public function getSupplier__r(){
         return $this->hasOne(Supplier::className(), ['Id' => 'IdSupplier']);
     }
 

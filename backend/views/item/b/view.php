@@ -4,14 +4,14 @@
 
 <div id="view-item-container">
 	<!-- UPDATE ITEM MASTER -->
-	<?= $this->render('_form-item', [
+	<?= $this->render('_form-item-master', [
                 "model" => $model
     ]) ?>
     <!-- END UPDATE ITEM MASTER -->
 
     <!-- UPDATE ITEM PART -->
 	<?php if($model->Type == 2){ ?>
-		<?= $this->render('_form-item-combined', [
+		<?= $this->render('_form-item-part', [
                 "model" => $model
         ]) ?>
 	<?php } ?>
@@ -27,5 +27,6 @@
 	</div>
 </div>
 <script>
-    var dataItemPart = <?= $itemPart ?>;
+    var dataItemPart = "<?= ($itemPart != null? $itemPart : 'null') ?>"
+	var urlSaveItem = '<?= Yii::$app->urlManager->createUrl(["item/save-item", 'id' => $_GET['id']]) ?>'
 </script>

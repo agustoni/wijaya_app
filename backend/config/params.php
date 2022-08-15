@@ -14,11 +14,11 @@ return [
 				            'image/png'
 				        ],
     'docIcon' => [
-    				'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => 'web/images/icons/icon-excel.png',
-    				'application/vnd.ms-excel' => 'web/images/icons/icon-excel.png',
-    				'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'web/images/icons/icon-word.png',
-    				'application/msword' => 'web/images/icons/icon-word.png',
-    				'text/plain' => 'web/images/icons/icon-txt.png',
-    				'application/pdf' => 'web/images/icons/icon-pdf.png',
+    				'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => '../web/images/icons/icon-excel.png',
+    				'application/vnd.ms-excel' => '../web/images/icons/icon-excel.png',
+    				'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => '../web/images/icons/icon-word.png',
+    				'application/msword' => '../web/images/icons/icon-word.png',
+    				'text/plain' => '../web/images/icons/icon-txt.png',
+    				'application/pdf' => '../web/images/icons/icon-pdf.png',
     			],
 ];

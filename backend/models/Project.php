@@ -12,7 +12,7 @@ class Project extends \yii\db\ActiveRecord{
 
     public function rules(){
         return [
-            [['Name', 'PaymentTerm', 'StartDate', 'EndDate', 'Duration', 'CreatedAt', 'CreatedBy'], 'required'],
+            // [['Name', 'PaymentTerm', 'StartDate', 'EndDate', 'Duration', 'CreatedAt', 'CreatedBy'], 'required'],
             [['Name', 'PaymentTerm'], 'string'],
             [['PI_At', 'DP_At', 'QC_At', 'BAST_At', 'StartDate', 'EndDate', 'CreatedAt'], 'safe'],
             [['PI_By', 'DP_By', 'QC_By', 'BAST_By', 'Status', 'UpdatePermission', 'Duration', 'CreatedBy'], 'integer'],
@@ -23,6 +23,18 @@ class Project extends \yii\db\ActiveRecord{
             [['PI_By'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['PI_By' => 'id']],
             [['QC_By'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['QC_By' => 'id']],
         ];
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if($insert){
+            $incrementProject = Project::find()->where("NoProject LIKE '%".date("ymd")."%'")->count();
+            $incrementProject++;
+            $noProject = date("ymd").str_pad($incrementProject,3,"0",STR_PAD_LEFT);
+
+            $this->NoProject = $noProject;
+            $this->updateAttributes(['invoice_no']);
+        }
     }
 
     public function attributeLabels(){

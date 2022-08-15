@@ -10,11 +10,25 @@ use yii\db\Query;
 
 use backend\models\Project;
 use backend\models\ProjectType;
+use backend\models\ProjectWorker;
+use backend\models\ProjectClient;
+use backend\models\ProjectContact;
+use backend\models\ProjectAmount;
+use backend\models\ProjectDetail;
+use backend\models\ProjectFile;
+use backend\models\ProjectItem;
+use backend\models\ProjectLog;
+use backend\models\ProjectNote;
+use backend\models\ProjectPayment;
+
+
 use backend\models\Item;
 use backend\models\ItemUnit;
 use backend\models\SupplierItem;
-use backend\models\ProjectWorker;
 use backend\models\Product;
+
+use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 
 class ProjectController extends Controller{
 	public function actionIndex(){
@@ -36,20 +50,29 @@ class ProjectController extends Controller{
 
 	public function actionView($id){
 		$projectType = ProjectType::find()->where("Status = 1")->all();
-		$role = new ProjectWorker;
+		// $role = new ProjectWorker;
 
 		$dataProject = $this->getDataProject();
 
-		return $this->render('view', ['id'=>$id,"projectType" => $projectType, 'dataProject' => $dataProject]);
+		return $this->render('view', ['id'=>$id, "projectType" => $projectType, 'dataProject' => $dataProject]);
 	}
 
-	public function actionGetSalesItem($q){
+	public function actionGetSalesItem($q, $idSupplier = null){
 		$model = new Item;
-		$allSalesItem = $model->getSalesItem($q);
+		$allSalesItem = $model->getSalesItem($q, $idSupplier);
 
 		$data = [];
-        foreach ($data as $d) {
-            $data[] = ['IdItem' => $d['IdItem'], 'IdSupplierItem' => $d['IdSupplierItem'], 'Name' => $d['ItemName'], 'UoM' => $d['UoM'], 'Cost' => $d['LastPrice'], 'StatusExp' => $d['StatusExp'], 'LastUpdated' => date('d-m-Y', strtotime($d['LastUpdated']))];
+        foreach ($allSalesItem as $d) {
+            $data[] = [
+            	'IdItem' => $d['IdItem'], 
+            	'IdSupplierItem' => $d['IdSupplierItem'], 
+            	'IdSupplier' => $d['IdSupplier'], 
+            	'Name' => $d['ItemName'], 
+            	'UoM' => $d['UoM'], 
+            	'Cost' => $d['LastPrice'], 
+            	'StatusExp' => $d['StatusExp'], 
+            	'LastUpdated' => date('d-m-Y', strtotime($d['LastUpdated']))
+            ];
         }
 
         echo Json::encode($data);
@@ -113,6 +136,9 @@ class ProjectController extends Controller{
     		}
         }
 
+        // echo "<pre>";
+        // print_r($data);
+        // die;
 		echo Json::encode($data);
 		die;
 	}
@@ -138,11 +164,37 @@ class ProjectController extends Controller{
 		// }
 	}
 
+	public function actionSaveProject(){
+		$dataPost = json_decode($_POST['data']);
+		$files = $_FILES;
+
+		$transaction = \Yii::$app->db->beginTransaction();
+		try {
+			$modelProject = new Project;
+			$modelProject->Name = $dataPost->Client->Company? $dataPost->Client->Company : null;
+			$modelProject->StartDate = $dataPost->Detail->StartDate? $dataPost->Detail->StartDate : null;
+			$modelProject->EndDate = $dataPost->Detail->EndDate? $dataPost->Detail->EndDate : null;
+			$modelProject->CreatedAt = date('Y-m-d H:i:s');
+			$modelProject->CreatedBy = Yii::$app->user->id;
+			// throw new \Exception("Failed Create Message Cancel");    
+
+		}catch (\Exception $e) {
+            $transaction->rollBack();
+            die('{"success":false, "message":"'. $e->getMessage() .'"}');
+        }
+
+		echo "<pre>";
+		echo "FILES<br>";
+		print_r($files);
+		print_r($data);
+		die;
+	}
+
 	// ********** DEV SECTION **********
 		public function getDataProject(){
 			$data = [
 				"Client" => [
-					"Company" => "'PT Lintas Batas",
+					"Company" => "PT Lintas Batas",
 					"Address" => "Jalan Semangka no 13 B, Kelurahan kebun buah, Kecamatan: Pasar buah, Semarang, 154621",
 					"Contact" => [
 						"0" => [
@@ -165,16 +217,17 @@ class ProjectController extends Controller{
 				],
 				"Detail" => [
 					"IdProjectType" => 2,
-					"DetailDescription" => "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+					"DetailDescription" => "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
+					"DetailFiles" => []
 				],
 				"DetailItem" => [
 					"0" => [
-						"id" => 2,
-						"listitem" => [
+						"IdProduct" => 2,
+						"Listitem" => [
 							"0" => [
 								"Id" => 5,
 								"IdItem" => 4,
-								// "IdSupplier" => 1,
+								"IdSupplier" => 1,
 								"Cost" => 1500000,
 								"ItemName" => "CPU",
 								"LastUpdated" => "26-01-2022",
@@ -183,20 +236,20 @@ class ProjectController extends Controller{
 								"UoM" => "Unit"
 							]
 						],
-						"text" => "Lift 1",
-						"total" => [
+						"Text" => "Lift 1",
+						"Total" => [
 							"Cost" => "1500000",
 							"Price" => "2500000",
 							"Margin" => "1000000",
 						]
 					],
 					"1" => [
-						"id" => 3,
-						"listitem" => [
+						"IdProduct" => 3,
+						"Listitem" => [
 							"0" => [
 								"Id" => 7,
 								"IdItem" => 4,
-								// "IdSupplier" => 1,
+								"IdSupplier" => 1,
 								"Cost" => 1500000,
 								"ItemName" => "CPU",
 								"LastUpdated" => "26-01-2022",
@@ -207,7 +260,7 @@ class ProjectController extends Controller{
 							"1" => [
 								"Id" => 8,
 								"IdItem" => 5,
-								// "IdSupplier" => 1,
+								"IdSupplier" => 5,
 								"Cost" => 450000,
 								"ItemName" => "Stabilizer",
 								"LastUpdated" => "26-10-2021",
@@ -218,7 +271,7 @@ class ProjectController extends Controller{
 							"2" => [
 								"Id" => 9,
 								"IdItem" => 6,
-								// "IdSupplier" => 1,
+								"IdSupplier" => 2,
 								"Cost" => 14000,
 								"ItemName" => "Paku Payung",
 								"LastUpdated" => "26-10-2021",
@@ -229,7 +282,7 @@ class ProjectController extends Controller{
 							"3" => [
 								"Id" => 10,
 								"IdItem" => 7,
-								// "IdSupplier" => 1,
+								"IdSupplier" => 5,
 								"Cost" => 150000,
 								"ItemName" => "Paku Tembok",
 								"LastUpdated" => "26-10-2021",
@@ -238,8 +291,8 @@ class ProjectController extends Controller{
 								"UoM" => "Pack"
 							]
 						],
-						"text" => "Lift 2",
-						"total" => [
+						"Text" => "Lift 2",
+						"Total" => [
 							"Cost" => "3464000",
 							"Price" => "6464000",
 							"Margin" => "3000000",
@@ -263,8 +316,36 @@ class ProjectController extends Controller{
 					]
 				],
 				"Payment" => [
-					
-				]
+			        "Amount" => "250000000",
+			        "IdPaymentDestination" => 2,
+        			"Installment" => '50-30-20',
+			        "PaymentPhase" => [
+			            "0" => [
+			                "IdPayment" => 1,
+			                "PayoutPhase" => 1,
+			                "PaymentDate" => "2022-03-26",
+			                "DueDate" => "2022-03-26",
+			                "PaymentNominal" => "125000000",
+			                "Status"=> 1
+			            ],
+			            "1" => [
+			                "IdPayment" => 2,
+			                "PayoutPhase" => 2,
+			                "PaymentDate" => "",
+			                "DueDate" => "2022-04-26",
+			                "PaymentNominal" => "100000000",
+			                "Status" => 0
+			            ],
+			            "2" => [
+			                "IdPayment" => 3,
+			                "PayoutPhase" => 3,
+			                "PaymentDate" => "",
+			                "DueDate" => "2022-05-26",
+			                "PaymentNominal" => "25000000",
+			                "Status" => 0
+			            ]
+			        ]
+			    ]
 			];
 
 			return Json::encode($data);

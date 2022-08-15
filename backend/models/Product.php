@@ -48,11 +48,21 @@ class Product extends \yii\db\ActiveRecord
     }
 
     public function getAllProduct($q=null){
-        $query = Yii::$app->db->createCommand('SELECT item__r.Id IdItem, item__r.Name ItemName, itemUnit__r.UoM, 
-                                                productItem__r.Qty, productItem__r.Id IdPrdItem, product__r.Id IdPrd, product__r.Name PrdName,
-                                                supplier_item.Id IdSupplierItem, idSupplier__r.Id IdSupplier, idSupplier__r.Name SupplierName,
-                                                supplier_item.Price LastPrice, supplier_item.LastUpdated LastUpdated,
-                                                supplierItemCost__r.Price PurchasePrice, supplierItemCost__r.Created_At PurchaseAt,
+        $query = Yii::$app->db->createCommand('SELECT 
+                                                item__r.Id IdItem, 
+                                                item__r.Name ItemName, 
+                                                itemUnit__r.UoM UoM, 
+                                                productItem__r.Qty, 
+                                                productItem__r.Id IdPrdItem, 
+                                                product__r.Id IdPrd, 
+                                                product__r.Name PrdName,
+                                                supplier_item.Id IdSupplierItem, 
+                                                idSupplier__r.Id IdSupplier, 
+                                                idSupplier__r.Name SupplierName,
+                                                supplier_item.Price LastPrice, 
+                                                supplier_item.LastUpdated LastUpdated,
+                                                supplierItemCost__r.Price PurchasePrice, 
+                                                supplierItemCost__r.Created_At PurchaseAt,
                                                 if(supplier_item.LastUpdated BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() OR supplierItemCost__r.Created_At BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW(), 1, 0) StatusExp
                                         FROM `supplier_item` 
                                         LEFT JOIN `item` `item__r` ON supplier_item.IdItem = item__r.Id 

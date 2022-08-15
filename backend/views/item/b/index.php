@@ -10,11 +10,8 @@
 			<h2>Item Master</h2>
 		</div>
 		<div class="col-md-9 text-right">
-			<a  class="btn btn-success ml-2" target="_blank" href="<?= yii::$app->urlManager->createUrl(['item/create-item']); ?>">
-                Buat Item
-            </a>
-            <a  class="btn btn-primary ml-2" target="_blank" href="<?= yii::$app->urlManager->createUrl(['item/create-item-combined']); ?>">
-                Buat Item Kombinasi
+			<a  class="btn btn-success ml-2" target="_blank" href="<?= yii::$app->urlManager->createUrl(['item/create']); ?>">
+                New Item
             </a>
 		</div>
 	</div>
