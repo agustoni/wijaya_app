@@ -30,9 +30,9 @@ class AppAsset extends AssetBundle{
         'js/typeahead/typeahead-kv.min.js',
         'js/busy-load.min.js',
     ];
-    // public $jsOptions = [
-    //     'position' => \yii\web\View::POS_HEAD
-    // ];
+    public $jsOptions = [
+        'position' => \yii\web\View::POS_HEAD
+    ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap4\BootstrapAsset',

@@ -34,6 +34,10 @@ class ItemController extends Controller{
 			$itemPart = Json::encode($this->getItemCombined('', $id));
 		}
 
+		// echo "<pre>";
+		// print_r($itemPart);
+		// die;
+
 		return $this->render('view', [
 			'model' => $model,
 			"itemType" => $itemType,
@@ -41,10 +45,18 @@ class ItemController extends Controller{
 		]);
 	}
 
-	public function actionCreate(){
+	public function actionCreateItem(){
 		$model = new Item;
 
-		return $this->render('create', [
+		return $this->render('create-item', [
+			"model" => $model
+		]);
+	}
+
+	public function actionCreateItemCombined(){
+		$model = new Item;
+
+		return $this->render('create-item-Combined', [
 			"model" => $model
 		]);
 	}
@@ -53,27 +65,26 @@ class ItemController extends Controller{
 		$transaction = \Yii::$app->db->beginTransaction();
 
 		try{
-			$name = $_POST['Item']['Name'];
-			$uom = $_POST['Item']['IdUoM'];
-			$type = $_POST['Item']['Type'];
-			$description = $_POST['Item']['Description'];
+			$idItem = $_POST['IdItem'];
+			$name = $_POST['Name'];
+			$uom = $_POST['IdUoM'];
+			$type = $_POST['Type'];
+			$description = $_POST['Description'];
 
-			if($id){
-				// update data dari menu view
-				$model = Item::findOne($id);
+			if($idItem){
+				$model = Item::findOne($idItem);
 			}else{
-				// create data
 				$model = new Item;
-			
-				if(!$uom){
-					$uom = $this->saveUom($_POST['Item']['NewUoM']);
-				}
 
 				// check apakah item dengan IdUoM yang di-input sudah ada
 				$checkData = Item::find()->where("Name = '".$name."' AND IdUoM = ".$uom." AND Type = ".$type)->one();
 				if(!empty($checkData)){
 					throw new \Exception("Input gagal: Item yang dimasukan sudah terdaftar!"); 
 				}
+			}
+
+			if(!$uom){
+				$uom = $this->saveUom($_POST['NewUoM']);
 			}
 		
 			$model->Name = $name;
@@ -120,12 +131,6 @@ class ItemController extends Controller{
 			// UPDATE DATA PART
 			if(!empty($dataUpdate)){
 				$updateExec = \Yii::$app->db->createCommand($dataUpdate)->execute();
-
-				// echo $updateExec;die;
-
-				// if(!$updateExec){
-				// 	throw new \Exception("Terjadi Kesalahan: update item part failed!");
-				// }
 			}
 
 			// INSERT NEW PART

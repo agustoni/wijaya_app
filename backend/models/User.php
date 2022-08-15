@@ -77,7 +77,7 @@ class User extends \yii\db\ActiveRecord{
         return $this->hasMany(ProjectLog::className(), ['CreatedBy' => 'id']);
     }
 
-    public function getProjectNoteCreatedBy__r){
+    public function getProjectNoteCreatedBy__r(){
         return $this->hasMany(ProjectNote::className(), ['CreatedBy' => 'id']);
     }
 
