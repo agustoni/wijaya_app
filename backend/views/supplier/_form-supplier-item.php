@@ -1,3 +1,10 @@
+<?php 
+
+    $this->registerCssFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css", ['depends'=> [\yii\bootstrap4\BootstrapAsset::className()]]);
+    $this->registerJsFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js",['depends' => [\yii\web\JqueryAsset::className()]]);
+    $this->registerJsFile('@web/web/js/page_script/supplier/_form-supplier-item.js',['depends' => [\yii\web\JqueryAsset::class]]);
+?>
+
 <div class="card card-light mb-3" id="supplier-master-container">
     <div class="card-header bg-info text-white p-2">
         <h4 class="card-title m-0">Item Berdasarkan Supplier</h4>
@@ -77,69 +84,3 @@
         <!-- END DATA ITEM -->
     </div>
 </div>
-
-<?php 
-	$this->registerCssFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css", [
-        'depends'=> [
-            \yii\bootstrap4\BootstrapAsset::className()
-        ],
-        'position' => \yii\web\View::POS_END
-    ]);
-    
-    $this->registerJsFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js",[
-        'depends' => [
-            \yii\web\JqueryAsset::className()
-        ],
-        'position' => \yii\web\View::POS_END
-    ]);
-
-    $scriptFormSupplierItem = "
-    	$(document).ready(function() {
-    		$('body').on('click', '.btn-edit', function(){
-    			$(this).parents('tr').find('td[class^=datatable_input-]').each(function(){
-    				// $(this).html()
-    				editMode($(this))
-    			})
-    		})
-
-    		function editMode(el){
-    			if(el.attr('editmode')){
-    				var value = el.attr('data-value')
-    				var className = el.attr('class')
-
-    				if(className == 'datatable_input-ActionBtn'){
-    					el.find('button.btn-success').removeClass('d-none')
-    					el.find('button.btn-edit').addClass('d-none')
-    					el.find('button.btn-remove').addClass('d-none')
-					}else{
-						el.empty()
-
-						var input = $(`
-		    				<input class='form-control `+className+`' value='`+value+`'>
-		    			`)
-		    			el.append(input)
-					}
-				}else{
-					if(className == 'datatable_input-ActionBtn'){
-    					el.find('button.btn-success').addClass('d-none')
-    					el.find('button.btn-edit').removeClass('d-none')
-    					el.find('button.btn-remove').removeClass('d-none')
-					}
-				}
-    		}
-
-            $('#supplieritem-search').select2();
-
-            $.fn.dataTable.moment( 'MMM D, Y' );
-            
-            $('#dataTable').DataTable({
-                'columnDefs': [
-                    { 'orderable': false, 'targets': 5 }
-                  ],
-                'aaSorting': []
-            });
-        });
-    ";
-
-    $this->registerJs($scriptFormSupplierItem, \yii\web\View::POS_END);
-?>

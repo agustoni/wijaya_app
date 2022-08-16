@@ -64,9 +64,9 @@ return [
             'thousandSeparator' => '.',
             'currencyCode' => 'Rp ',
         ],
-        // 'FormatingNumber' => [
-        //     'class' => 'backend\components\FormatingNumber',
-        // ],
+        'FormatingNumber' => [
+            'class' => 'backend\components\FormatingNumber',
+        ],
         
         'urlManager' => [
             'enablePrettyUrl' => true,

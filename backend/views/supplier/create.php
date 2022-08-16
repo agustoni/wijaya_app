@@ -17,10 +17,3 @@ $this->title = 'Create Supplier';
         <!-- END FORM SUPPLIER -->
     </div>
 </div>
-<?php
-    $scriptSupplierCreate = "
-    	var urlSaveSupplier = '".Yii::$app->urlManager->createUrl("supplier/save-supplier")."'
-    ";
-
-    $this->registerJs($scriptSupplierCreate, \yii\web\View::POS_END);
-?>

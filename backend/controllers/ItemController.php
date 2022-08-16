@@ -7,6 +7,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
 
+use backend\models\ItemSearch;
 use backend\models\Item;
 use backend\models\ItemPart;
 use backend\models\ItemUnit;
@@ -16,13 +17,13 @@ use yii\web\ForbiddenHttpException;
 
 class ItemController extends Controller{
 	public function actionIndex(){
-		$model = Item::find()->orderBy(['Id'=>SORT_DESC])->all();
-		$itemType = new Item;
+		$searchModel = new ItemSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		return $this->render("index", [
-			"model" => $model,
-			"itemType" => $itemType
-		]);
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
 	}
 
 	public function actionView($id){
@@ -33,10 +34,6 @@ class ItemController extends Controller{
 		if($model->Type == 2){
 			$itemPart = Json::encode($this->getItemCombined('', $id));
 		}
-
-		// echo "<pre>";
-		// print_r($itemPart);
-		// die;
 
 		return $this->render('view', [
 			'model' => $model,
@@ -177,7 +174,10 @@ class ItemController extends Controller{
         $data = ItemUnit::find()->where('UoM LIKE "%' . $q .'%"')->all();
         $out = [];
         foreach ($data as $d) {
-            $out[] = ['Id' => $d->Id, 'UoM' => $d->UoM];
+            $out[] = [
+            	'Id' => $d->Id, 
+            	'UoM' => $d->UoM
+            ];
         }
         echo Json::encode($out);
         die;
@@ -187,7 +187,11 @@ class ItemController extends Controller{
     	$data = Item::find()->where('Name LIKE "%' . $q .'%"')->all();
     	$out = [];
     	foreach ($data as $d) {
-            $out[] = ['Id' => $d->Id, 'Name' => $d->Name, 'UoM' => $d->itemUnit__r->UoM];
+            $out[] = [
+            	'Id' => $d->Id, 
+            	'Name' => $d->Name, 
+            	'UoM' => $d->itemUnit__r->UoM
+            ];
         }
         echo Json::encode($out);
         die;
@@ -210,7 +214,14 @@ class ItemController extends Controller{
     		$itemPart = [];
 
     		foreach($data->itemPartParent__r as $part){
-    			$itemPart[] = ['IdItemPart' => $part->Id, 'Id' => $part->IdItem, 'Part' => $part->item__r->Name, 'UoM' => $part->item__r->itemUnit__r->UoM, 'Qty' => $part->Qty, 'Description' => $part->Description];
+    			$itemPart[] = [
+    				'IdItemPart' => $part->Id, 
+    				'Id' => $part->IdItem, 
+    				'Part' => $part->item__r->Name, 
+    				'UoM' => $part->item__r->itemUnit__r->UoM, 
+    				'Qty' => $part->Qty, 
+    				'Description' => $part->Description
+    			];
     		}
 
             $out[] = ['Id' => $data->Id, 'Name' => $data->Name." (".$data->itemUnit__r->UoM.")", 'ItemPart' => $itemPart];
@@ -221,10 +232,21 @@ class ItemController extends Controller{
 	    		$itemPart = [];
 
 	    		foreach($d->itemPartParent__r as $part){
-	    			$itemPart[] = ['IdItemPart' => $part->Id, 'Id' => $part->IdItem, 'Part' => $part->item__r->Name, 'UoM' => $part->item__r->itemUnit__r->UoM, 'Qty' => $part->Qty, 'Description' => $part->Description];
+	    			$itemPart[] = [
+	    				'IdItemPart' => $part->Id, 
+	    				'Id' => $part->IdItem, 
+	    				'Part' => $part->item__r->Name, 
+	    				'UoM' => $part->item__r->itemUnit__r->UoM, 
+	    				'Qty' => $part->Qty, 
+	    				'Description' => $part->Description
+	    			];
 	    		}
 
-	            $out[] = ['Id' => $d->Id, 'Name' => $d->Name." (".$d->itemUnit__r->UoM.")", 'ItemPart' => $itemPart];
+	            $out[] = [
+	            	'Id' => $d->Id, 
+	            	'Name' => $d->Name." (".$d->itemUnit__r->UoM.")", 
+	            	'ItemPart' => $itemPart
+	            ];
 	        }
     	}
 

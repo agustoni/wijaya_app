@@ -13,7 +13,8 @@ $this->title = 'View Supplier';
     <div id="form-supplier-wrapper">
     	<!-- FORM SUPPLIER -->
             <?= $this->render('_form', [
-                "model" => $model
+                "model" => $model,
+                "supplierContact" => $supplierContact
             ]) ?>
         <!-- END FORM SUPPLIER -->
 
@@ -24,11 +25,3 @@ $this->title = 'View Supplier';
         <!-- END FORM SUPPLIER ITEM -->
     </div>
 </div>
-<?php
-    $scriptSupplierView = "
-        var supplierContact = ".(!empty($supplierContact)? $supplierContact : 'null')." 
-    	var urlSaveSupplier = '".Yii::$app->urlManager->createUrl(["supplier/save-supplier", 'id'=>$_GET['id']])."'
-    ";
-
-    $this->registerJs($scriptSupplierView, \yii\web\View::POS_END);
-?>

@@ -12,10 +12,9 @@ class SupplierItemCost extends \yii\db\ActiveRecord{
 
     public function rules(){
         return [
-            [['IdSupplier', 'Price', 'Qty'], 'required'],
-            [['IdSupplier', 'Flag'], 'integer'],
+            [['Price', 'Qty'], 'required'],
             [['Price', 'Qty'], 'number'],
-            [['IdSupplier'], 'exist', 'skipOnError' => true, 'targetClass' => Supplier::className(), 'targetAttribute' => ['IdSupplier' => 'Id']],
+            // [['IdSupplier'], 'exist', 'skipOnError' => true, 'targetClass' => Supplier::className(), 'targetAttribute' => ['IdSupplier' => 'Id']],
         ];
     }
 

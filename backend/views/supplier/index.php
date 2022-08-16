@@ -1,8 +1,8 @@
 <?php 
+    use yii\widgets\Pjax;
+    use yii\grid\GridView;
+
 	$this->title = "Supplier Master";
-	// $this->params['breadcrumbs'][] = ['label' => 'Invoices', 'url' => ['index']];
-	// $this->params['breadcrumbs'][] = $this->title;
-	\yii\web\YiiAsset::register($this);
 ?>
 <div class="item-wrapper">
 	<div class="row my-2">
@@ -15,58 +15,65 @@
             </a>
 		</div>
 	</div>
-	<div class="card my-4">
-		<div class="card-body">
-			<div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th width="10%" class="text-center">#</th>
-                            <th width="30%">Supplier</th>
-                            <th width="30%">Address</th>
-                            <th width="20%">Description</th>
-                            <th width="10%">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    	<?php foreach($model as $i => $spl): ?>
-                    		<tr>
-                    			<td><?= $i+1 ?></td>
-                    			<td><?= $spl->Name ?></td>
-                    			<td><?= ($spl->Address? $spl->Address : '-') ?></td>
-                                <td><?= ($spl->Description? $spl->Description : '-') ?></td>
-                    			<td>
-                    				<button class="btn btn-sm btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Options
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" target="_blank" href="<?= yii::$app->urlManager->createUrl(['supplier/view', 'id'=> $spl->Id]) ?>">
-                                        	<i class="fas fa-eye text-secondary"></i> View
-                                        </a>
-                                    </div>
-                    			</td>
-                    		</tr>
-                    	<?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+	
+    <?php Pjax::begin(); ?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
 
-        </div>
-	</div>
+            [
+                'attribute' => 'Name',
+                'value' => function($model){
+                    return $model->Name;
+                },
+                'format' => 'raw'
+            ],
+            [
+                'attribute' => 'Address',
+                'value' => function($model){
+                    return $model->Address? $model->Address : '-';
+                },
+                'format' => 'raw'
+            ],
+            [
+                'attribute' => 'Phone',
+                'value' => function($model){
+                    return $model->Phone? $model->Phone : '-';
+                },
+                'format' => 'raw'
+            ],
+            [
+                'attribute' => 'Description',
+                'value' => function($model){
+                    return $model->Description? $model->Description : '-';
+                },
+                'format' => 'raw'
+            ],
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'header' => 'Action',
+                'template' => '{action}',
+                'buttons' => [
+                    'action' => function($url, $model){
+                        return '
+                        <button class="btn btn-sm btn-outline-info dropdown-toggle" type="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Options
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="'.Yii::$app->urlManager->createUrl(['/supplier/view', 'id' => $model->Id]).'" data-pjax=0 target="_blank">
+                                Lihat
+                            </a>
+                        </div>';
+                    }
+                ]
+            ],
+        ],
+        'pager' => [
+            'class' => '\yii\bootstrap4\LinkPager'
+        ]
+    ]); ?>
+    <?php Pjax::end(); ?>
 </div>
-<?php
-	$scriptSupplierIndex="
-        $(document).ready(function(){
-            $.fn.dataTable.moment( 'MMM D, Y' );
-            
-            $('#dataTable').DataTable({
-                'columnDefs': [
-                    {'orderable': true, 'targets': 4 }
-                  ],
-                'aaSorting': []
-            });
-        })
-    ";
-
-	$this->registerJs($scriptSupplierIndex, \yii\web\View::POS_END, 'script-index');
-?>

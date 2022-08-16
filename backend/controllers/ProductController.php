@@ -10,6 +10,7 @@ use yii\helpers\Json;
 use backend\models\Item;
 use backend\models\ItemPart;
 use backend\models\ItemUnit;
+use backend\models\ProductSearch;
 use backend\models\Product;
 use backend\models\ProductItem;
 
@@ -19,11 +20,13 @@ use yii\web\ForbiddenHttpException;
 class ProductController extends Controller{
 	
 	public function actionIndex(){
-		$model = Product::find()->orderBy(['Id'=>SORT_DESC])->all();
+		$searchModel = new ProductSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		return $this->render("index", [
-			"model" => $model
-		]);
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
 	}
 
 	public function actionCreate(){

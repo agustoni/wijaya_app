@@ -1,10 +1,3 @@
-var host = window.location.host;
-if(host == 'localhost'){
-    _url = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1] + "/"
-}else{
-    _url = window.location.protocol + "//" + window.location.host + "/"
-}
-
 $(document).ready(function(){
 	if(arrPoItem){
         $.each(arrPoItem, function(idx, val){
@@ -121,7 +114,6 @@ $(document).ready(function(){
             },
         }).complete(function(d){
             $('#po-form-container').busyLoad('hide')
-            changePoTotal()
         })
     }
 
@@ -196,7 +188,6 @@ $(document).ready(function(){
 	            },
 	        }).complete(function(d){
 	            $('#po-form-container').busyLoad('hide')
-	            changePoTotal()
 	        })
     	}
     })

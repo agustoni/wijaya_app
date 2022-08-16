@@ -6,17 +6,20 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
+use backend\models\SupplierSearch;
 use backend\models\Supplier;
 use backend\models\SupplierContact;
 
 class SupplierController extends Controller{
 	
 	public function actionIndex(){
-		$model = Supplier::find()->orderBy(['Id'=>SORT_DESC])->all();
+		$searchModel = new SupplierSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		return $this->render("index", [
-			'model' => $model
-		]);
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
 	}
 
 	public function actionCreate(){
@@ -37,7 +40,6 @@ class SupplierController extends Controller{
 			$supplierContact[$key]['Name'] = $cnt->Name;
 			$supplierContact[$key]['Phone'] = $cnt->Phone;
 		}
-
 
 		return $this->render('view', [
 			'model' => $model,
