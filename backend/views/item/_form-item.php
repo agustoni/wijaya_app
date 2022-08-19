@@ -1,5 +1,7 @@
 <?php 
     $this->registerJsFile('@web/web/js/page_script/item/_form-item.js',['depends' => [\yii\web\JqueryAsset::class]]);
+    $this->registerCssFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css", ['depends'=> [\yii\bootstrap4\BootstrapAsset::className()]]);
+    $this->registerJsFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js",['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
 
 <style>
@@ -12,6 +14,7 @@
         margin: 0;
     }
 </style>
+<!-- FORM ITEM -->
 <div class="card card-light mb-3" id="item-master-container">
     <div class="card-header bg-info text-white p-2">
         <h4 class="card-title m-0">Item Master</h4>
@@ -73,6 +76,8 @@
         </div>
     </div>
 </div>
+<!-- END FORM ITEM -->
+
 <script>
     var actionId = '<?= Yii::$app->controller->action->id ?>'
 </script>

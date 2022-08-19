@@ -9,6 +9,7 @@ use yii\helpers\Json;
 use backend\models\SupplierSearch;
 use backend\models\Supplier;
 use backend\models\SupplierContact;
+use backend\models\Item;
 
 class SupplierController extends Controller{
 	
@@ -32,6 +33,7 @@ class SupplierController extends Controller{
 
 	public function actionView($id){
 		$model = Supplier::findOne($id);
+		$allItem = Item::find()->Where('Type = 1')->all();
 		$supplierContact = [];
 
 		foreach($model->supplierContact__r as $key => $cnt){
@@ -43,7 +45,8 @@ class SupplierController extends Controller{
 
 		return $this->render('view', [
 			'model' => $model,
-			'supplierContact' => Json::encode($supplierContact)
+			'supplierContact' => Json::encode($supplierContact),
+			'allItem' => $allItem
 		]);
 	}
 
@@ -66,7 +69,18 @@ class SupplierController extends Controller{
 		}
 		echo Json::encode($data);
 		die;
-		// die('{"success":true}');
+	}
+
+	public function actionGetAllItem($q=null){
+		$model = Item::find()->where('Name LIKE "%'.$q.'%"')->all();
+		$data = [];
+
+		foreach($model as $mdl){
+			$data[] = ['id' => $mdl->Id, 'text' => $mdl->Name." (".$mdl->itemUnit__r->UoM.")"]; 
+		}
+
+		echo Json::encode($data);
+		die;
 	}
 
 	public function actionSaveSupplier($id=null){

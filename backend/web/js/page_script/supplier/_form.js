@@ -119,7 +119,7 @@ $(document).ready(function(){
                                     location.reload()
                                 }else if(actionId == 'create'){
                                 	alert('data berhasil dimasukan')
-                                    $('#supplier-master-container .card-body :input').val('')
+                                    $('#form-supplier .card-body :input').val('')
                                 }
                             }
                         },

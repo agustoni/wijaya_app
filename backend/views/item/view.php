@@ -1,4 +1,7 @@
 <?php
+	// $this->registerCssFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css", ['depends'=> [\yii\bootstrap4\BootstrapAsset::className()]]);
+ //    $this->registerJsFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js",['depends' => [\yii\web\JqueryAsset::className()]]);
+
 	$this->title = 'View Item';
 ?>
 
@@ -17,14 +20,11 @@
 	<?php } ?>
 	<!-- END UPDATE ITEM PART -->
 
-	<div class="card card-light mb-3">
-	    <div class="card-header bg-info text-white p-2">
-	        <h4 class="card-title m-0">Supplier</h4>
-	    </div>
-	    <div class="card-body p-2">
-
-	    </div>
-	</div>
+	<!-- FORM ITEM SUPPLIER -->
+		<?= $this->render('_form-supplier-item', [
+                "model" => $model
+        ]) ?>
+	<!-- END FORM ITEM SUPPLIER -->
 </div>
 <script>
     var dataItemPart = <?= $itemPart ?>;

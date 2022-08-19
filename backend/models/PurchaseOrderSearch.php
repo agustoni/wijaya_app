@@ -39,7 +39,7 @@ class PurchaseOrderSearch extends PurchaseOrder
     {
         $query = PurchaseOrder::find()
                     ->joinWith(['supplier__r'])
-                    ->where('Status != 0 AND CreatedAt >= "'.date('Y-m-d', strtotime($_from)).' 00:00:00'.'" AND CreatedAt <= "'.date('Y-m-d', strtotime($_to)).' 00:00:00'.'"');
+                    ->where('Status != 0 AND CreatedAt >= "'.date('Y-m-d', strtotime($_from)).' 00:00:00'.'" AND CreatedAt <= "'.date('Y-m-d', strtotime($_to)).' 23:59:59'.'"');
 
         // add conditions that should always apply here
 

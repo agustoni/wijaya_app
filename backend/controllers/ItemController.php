@@ -11,6 +11,7 @@ use backend\models\ItemSearch;
 use backend\models\Item;
 use backend\models\ItemPart;
 use backend\models\ItemUnit;
+use backend\models\Supplier;
 
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
@@ -60,7 +61,7 @@ class ItemController extends Controller{
 
 	public function actionSaveItem($id=null){
 		$transaction = \Yii::$app->db->beginTransaction();
-
+		
 		try{
 			$idItem = $_POST['IdItem'];
 			$name = $_POST['Name'];
@@ -68,20 +69,20 @@ class ItemController extends Controller{
 			$type = $_POST['Type'];
 			$description = $_POST['Description'];
 
+			if(!$uom){
+				$uom = $this->saveUom($_POST['NewUoM']);
+			}
+
 			if($idItem){
 				$model = Item::findOne($idItem);
 			}else{
 				$model = new Item;
 
 				// check apakah item dengan IdUoM yang di-input sudah ada
-				$checkData = Item::find()->where("Name = '".$name."' AND IdUoM = ".$uom." AND Type = ".$type)->one();
+				$checkData = Item::find()->where("Name = '".$name."' AND IdUoM = '".$uom."' AND Type = ".$type)->one();
 				if(!empty($checkData)){
 					throw new \Exception("Input gagal: Item yang dimasukan sudah terdaftar!"); 
 				}
-			}
-
-			if(!$uom){
-				$uom = $this->saveUom($_POST['NewUoM']);
 			}
 		
 			$model->Name = $name;
@@ -251,6 +252,19 @@ class ItemController extends Controller{
     	}
 
         return $out;
+    }
+
+    public function actionGetSupplier($q){
+    	$data = Supplier::find()->where('Name LIKE "%' . $q .'%"')->all();
+    	$out = [];
+    	foreach ($data as $d) {
+            $out[] = [
+            	'Id' => $d->Id, 
+            	'Name' => $d->Name, 
+            ];
+        }
+        echo Json::encode($out);
+        die;
     }
 
     public function saveUom($uom){

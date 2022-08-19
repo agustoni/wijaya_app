@@ -1,44 +1,71 @@
 $(document).ready(function(){
-	$('body').on('click', '.btn-edit', function(){
-		$(this).parents('tr').find('td[class^=datatable_input-]').each(function(){
-			// $(this).html()
-			editMode($(this))
-		})
+	$('.supplier_item-IdItem').select2({
+	 	ajax: {
+	    	url: _url+'backend/product/get-all-item',
+	    	dataType: 'json',
+	    	processResults: function (data) {
+		      	return {
+		        	results: data
+		      	}
+		    }
+	  	}
 	})
 
-	function editMode(el){
-		if(el.attr('editmode')){
-			var value = el.attr('data-value')
-			var className = el.attr('class')
+	// $('.supplier_item-IdItem').on('select2:select', function (e) {
+	//  	var selected = e.params.data
 
-			if(className == 'datatable_input-ActionBtn'){
-				el.find('button.btn-success').removeClass('d-none')
-				el.find('button.btn-edit').addClass('d-none')
-				el.find('button.btn-remove').addClass('d-none')
-			}else{
-				el.empty()
+	//  	console.log('supplier item select2')
+	//  	console.log(selected)
 
-				var input = $(`
-    				<input class='form-control `+className+`' value='`+value+`'>
-    			`)
-    			el.append(input)
-			}
-		}else{
-			if(className == 'datatable_input-ActionBtn'){
-				el.find('button.btn-success').addClass('d-none')
-				el.find('button.btn-edit').removeClass('d-none')
-				el.find('button.btn-remove').removeClass('d-none')
-			}
+	 	// $('.select2-itemlist-input').val(null).trigger('change')
+	// })
+
+	$('.btn-add-supplier-item').click(function(){
+		if(!$('.supplier_item-IdItem').val()){
+			alert('item belum dipilih')
+			return false
 		}
-	}
 
-    $('#supplieritem-search').select2();
+		var data = $('.supplier_item-IdItem').select2('data')
+		var itemName = data[0].text
+		var idItem = $('.supplier_item-IdItem').val()
+		var stock = $('.supplier_item-Stock').val()? $('.supplier_item-Stock').val() : 0
+		var stocksupplier = 1
+		var btnEdit = `<button class="btn btn-sm btn-info btn-edit">
+            						<i class="fas fa-pencil-alt"></i>
+            					</button>`
 
-    $.fn.dataTable.moment( 'MMM D, Y' );
-    
-    $('#dataTable').DataTable({
+		if(confirm('tambah item "'+itemName+'" ?')){
+			var t = $('#dtb-supplier-item').DataTable()
+			var counter = t.rows().count() + 1
+
+			t.row.add([counter, itemName, stocksupplier+"/"+stock, btnEdit]).draw(false);
+		}
+
+		// console.log('idItem = '+idItem)
+		// console.log('idSupplier = '+idSupplier)
+
+		// $('.supplier_item-IdItem').val('').trigger('change')
+	})
+
+	$("body").on("keypress change", ".isNumber", function (evt){
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+
+        if (charCode == 46 || (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+
+        value = $(this).val().replace(/^(0*)/,"");
+        $(this).val(value);
+
+        return true;
+    })
+
+	$.fn.dataTable.moment( 'MMM D, Y' );
+    $('#dtb-supplier-item').DataTable({
         'columnDefs': [
-            { 'orderable': false, 'targets': 5 }
+            { 'orderable': false, 'targets': 3}
           ],
         'aaSorting': []
     })

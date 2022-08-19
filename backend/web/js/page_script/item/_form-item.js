@@ -1,5 +1,15 @@
 $(document).ready(function(){
 
+    $('#supplieritem-search').select2()
+    $.fn.dataTable.moment( 'MMM D, Y' );
+    
+    $('#dataTable').DataTable({
+        'columnDefs': [
+            { 'orderable': false, 'targets': 5 }
+          ],
+        'aaSorting': []
+    })
+
 // ================== AUTOCOMPLETE UoM ==================
     $('body').on('keyup', '#item_input-IdUoM', function(e){
         if($('#item_input-IdUoM').parents('.twitter-typeahead').length == 0){
@@ -118,7 +128,7 @@ $(document).ready(function(){
                         if(actionId == 'view'){
                             alert('data berhasil diperbaharui')
                             location.reload()
-                        }else if(actionId == 'create'){
+                        }else if(actionId == 'create-item'){
                             alert('data berhasil dibuat')
                             $('#item-master-container .card-body :input').val('')
                         }

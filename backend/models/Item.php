@@ -109,7 +109,7 @@ class Item extends \yii\db\ActiveRecord{
     }
 
     public function getItemStock__r(){
-        return $this->hasMany(ItemStock::className(), ['IdItem' => 'Id']);
+        return $this->hasOne(ItemStock::className(), ['IdItem' => 'Id']);
     }
 
     public function getProReqItem__r(){

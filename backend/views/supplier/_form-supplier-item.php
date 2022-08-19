@@ -1,86 +1,65 @@
 <?php 
-
-    $this->registerCssFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css", ['depends'=> [\yii\bootstrap4\BootstrapAsset::className()]]);
-    $this->registerJsFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js",['depends' => [\yii\web\JqueryAsset::className()]]);
     $this->registerJsFile('@web/web/js/page_script/supplier/_form-supplier-item.js',['depends' => [\yii\web\JqueryAsset::class]]);
 ?>
-
-<div class="card card-light mb-3" id="supplier-master-container">
+<style>
+	.select2-container--default .select2-selection--single .select2-selection__arrow {height: 34px;position: absolute;top: 1px;right: 1px;width: 20px;}
+	.select2-container--default .select2-selection--single{height: 38px;}
+</style>
+<div class="card card-light mb-3" id="form-supplier-item">
     <div class="card-header bg-info text-white p-2">
-        <h4 class="card-title m-0">Item Berdasarkan Supplier</h4>
+        <h4 class="card-title m-0">Daftar Item</h4>
     </div>
-    <div class="card-body p-2">
+    <div class="card-body">
+    	<h5>Tambah Item</h5>
     	<div class="form-row">
     		<div class="col-md-4">
-    			<label class="font-weight-bold" for="supplieritem-search">Cari Data Berdasarkan:</label>
-    			<select class="form-control" id="supplieritem-search" name="item" multiple="multiple">
-    				<option value="_allitem" selected="selected">Semua Item</option>
-					<?php foreach($model->supplierItem__r as $spi): ?>
-						<option value="<?= $spi->IdItem ?>"><?= $spi->item__r->Name ?></option>
-					<?php endforeach; ?>
-				</select>
+    			<select class="js-example-basic-single form-control supplier_item-IdItem"></select>
     		</div>
     		<div class="col-md-4">
-    			<label>Total Stock</label>
-            	<input class="form-control" value="">
+    			<input class="form-control isNumber supplier_item-Stock" placeholder="Stock...">
+    		</div>
+    		<div class="col-md-2">
+    			<button class="btn btn-primary btn-add-supplier-item">Tambah</button>
     		</div>
     	</div>
-    	<!-- DATA ITEM -->
+    <!-- SUPPLIER ITEM -->
     	<div class="table-responsive">
     		<hr>
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+	    	<div class="pb-3">
+	    		<div class="bg-info float-sm-left mt-1 mr-2" style="height: 15px;width: 15px;"></div>
+	    		<small class="float-sm-left text-info">Total stock item dari semua supplier</small>
+	    	</div><br>
+            <table class="table table-bordered" id="dtb-supplier-item" width="100%" cellspacing="0">
                 <thead class="thead-dark">
                     <tr>
-                        <th width="5%">#</th>
-                        <th width="25%">Item</th>
-                        <th width="20%">Stock</th>
-                        <th width="20%">Harga Beli</th>
-                        <th width="20%">Tgl Beli</th>
-                        <th width="10%">Actions</th>
+                        <th width="15%">#</th>
+                        <th width="40%">Item</th>
+                        <th width="30%">Stock</th>
+                        <th width="15%">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="supplier-item-list">
-                    <?php 
-                    	$counter = 1;
-                    	// for($i=0;$i<200;$i++):
-                    	foreach($model->supplierItem__r as $spi): 
-                    		foreach($spi->supplierItemCost__r as $spc):  ?>
-                    			<tr>
-                    				<td class="datatable_input-IdSpc" data-value="<?= $spc->Id ?>">
-                    					<?= $counter ?>
-                    				</td>
-                    				<td class="datatable_input-Name" data-value="<?= $spi->item__r->Name ?>" editmode="true">
-                    					<?= $spi->item__r->Name ?>
-                    				</td>
-                    				<td class="datatable_input-Qty" data-value="<?= $spc->Qty ?>" editmode="true">
-                    					<?= $spc->Qty ?>
-                    				</td>
-                    				<td class="datatable_input-Price" data-value="<?= $spc->Price ?>" editmode="true">
-                    					<?= Yii::$app->formatter->asDecimal($spc->Price, 0) ?>
-                    				</td>
-                    				<td class="datatable_input-CreatedAt" data-value="<?= $spc->Created_At ?>" editmode="true">
-                    					<?= date("d-m-Y", strtotime($spc->Created_At)) ?>
-                    				</td>
-                    				<td class="datatable_input-ActionBtn" data-value="<?= $spc->Price ?>" editmode="true">
-                    					<button class="btn btn-sm btn-success btn-submit d-none">
-                    						<i class="fas fa-check"></i>
-                    					</button>
-                    					<button class="btn btn-sm btn-info btn-edit">
-                    						<i class="fas fa-pencil-alt"></i>
-                    					</button>
-                    					<button class="btn btn-sm btn-danger btn-remove">
-                    						<i class="fas fa-times"></i>
-                    					</button>
-                    				</td>
-                    			</tr>		
-                    <?php		$counter++; 
-                			endforeach; 
-                    	endforeach; 
-                    // endfor;
-                    ?>
+                    <?php foreach($model->supplierItem__r as $counter => $spi): ?>
+            			<tr>
+            				<td class="datatable_input-IdSpc" data-value="<?= $spi->Id ?>">
+            					<?= $counter+1 ?>
+            				</td>
+            				<td class="datatable_input-Name" data-value="<?= $spi->item__r->Name ?>" editmode="true">
+            					<?= $spi->item__r->Name ?>
+            				</td>
+            				<td class="datatable_input-Qty" data-value="<?= $spi->Stock ?>" editmode="true">
+            					<?= $spi->Stock ?> / <span class="text-info font-weight-bold"><?= $spi->item__r->itemStock__r->Stock ?></span>
+            				</td>
+            				<td class="datatable_input-ActionBtn"  editmode="true">
+            					<button class="btn btn-sm btn-info btn-edit">
+            						<i class="fas fa-pencil-alt"></i>
+            					</button>
+            				</td>
+            			</tr>		
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
-        <!-- END DATA ITEM -->
+    <!-- END SUPPLIER ITEM -->
     </div>
 </div>

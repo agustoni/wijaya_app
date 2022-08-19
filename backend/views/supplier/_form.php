@@ -2,12 +2,12 @@
     $this->registerJsFile('@web/web/js/page_script/supplier/_form.js',['depends' => [\yii\web\JqueryAsset::class]]);
 ?>
 
-<div class="card card-light mb-3" id="supplier-master-container">
+<div class="card card-light mb-3" id="form-supplier">
     <div class="card-header bg-info text-white p-2">
         <h4 class="card-title m-0">Supplier Master</h4>
     </div>
     <div class="card-body p-2">
-    	<!-- MASTER SUPPLIER -->
+    <!-- MASTER SUPPLIER -->
     	<div class="form-row">
             <div class="form-group col-md-5">
                 <label class="font-weight-bold" for="supplier_input-Name">Nama Supplier</label>
@@ -25,9 +25,9 @@
                 <textarea class="form-control" id="supplier_input-Description" rows=3 placeholder="Keterangan. . ." name="Supplier[Description]"><?= ($model->Description? $model->Description : '') ?></textarea>
             </div>
         </div>
-        <!-- END MASTER SUPPLIER -->
+    <!-- END MASTER SUPPLIER -->
 
-        <!-- CONTACT -->
+    <!-- CONTACT -->
         <hr>
         <h4>Kontak</h4>
         <div class="form-row form-label">
@@ -46,13 +46,7 @@
                 <button type="button" class="btn btn-success" id="save_Supplier">Save</button>
             </div>
         </div>
-    	<!-- END CONTACT -->
-
-        <!-- <div class="form-row">
-        	<div class="form-group col-md-12 text-right">
-        		<button type="buttom" class="btn btn-success" id="save_Supplier">Save</button>
-        	</div>
-        </div> -->
+    <!-- END CONTACT -->
     </div>
 </div>
 <script>
