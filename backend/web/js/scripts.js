@@ -14,6 +14,13 @@ $(document).ready(function(){
     });
 })
 
+var host = window.location.host;
+if(host == 'localhost'){
+    _url = window.location.protocol + "//" + window.location.host + "/" + window.location.pathname.split('/')[1] + "/"
+}else{
+    _url = window.location.protocol + "//" + window.location.host + "/"
+}
+
 function numberFormat(currency, nStr){
     nStr += '';
     var x = nStr.split('.');

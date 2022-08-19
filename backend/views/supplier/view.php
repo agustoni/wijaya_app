@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
-
+$this->registerCssFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css", ['depends'=> [\yii\bootstrap4\BootstrapAsset::className()]]);
+$this->registerJsFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js",['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->title = 'View Supplier';
 ?>
 
@@ -13,22 +14,25 @@ $this->title = 'View Supplier';
     <div id="form-supplier-wrapper">
     	<!-- FORM SUPPLIER -->
             <?= $this->render('_form', [
-                "model" => $model
+                "model" => $model,
+                "supplierContact" => $supplierContact
             ]) ?>
         <!-- END FORM SUPPLIER -->
 
-        <!-- FORM SUPPLIER ITEM -->
+        <!-- FORM SUPPLIER ITEM  -->
             <?= $this->render('_form-supplier-item', [
+                "model" => $model,
+                "allItem" => $allItem
+            ]) ?>
+        <!-- END FORM SUPPLIER ITEM  -->
+
+        <!-- FORM SUPPLIER ITEM COST -->
+            <?= $this->render('_form-supplier-item-cost', [
                 "model" => $model
             ]) ?>
-        <!-- END FORM SUPPLIER ITEM -->
+        <!-- END FORM SUPPLIER ITEM COST -->
     </div>
 </div>
-<?php
-    $scriptSupplierView = "
-        var supplierContact = ".(!empty($supplierContact)? $supplierContact : 'null')." 
-    	var urlSaveSupplier = '".Yii::$app->urlManager->createUrl(["supplier/save-supplier", 'id'=>$_GET['id']])."'
-    ";
-
-    $this->registerJs($scriptSupplierView, \yii\web\View::POS_END);
-?>
+<script>
+    var idSupplier = <?= $_GET['id']? $_GET['id'] : 'null' ?>;
+</script>

@@ -6,17 +6,21 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
+use backend\models\SupplierSearch;
 use backend\models\Supplier;
 use backend\models\SupplierContact;
+use backend\models\Item;
 
 class SupplierController extends Controller{
 	
 	public function actionIndex(){
-		$model = Supplier::find()->orderBy(['Id'=>SORT_DESC])->all();
+		$searchModel = new SupplierSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		return $this->render("index", [
-			'model' => $model
-		]);
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
 	}
 
 	public function actionCreate(){
@@ -29,6 +33,7 @@ class SupplierController extends Controller{
 
 	public function actionView($id){
 		$model = Supplier::findOne($id);
+		$allItem = Item::find()->Where('Type = 1')->all();
 		$supplierContact = [];
 
 		foreach($model->supplierContact__r as $key => $cnt){
@@ -38,10 +43,10 @@ class SupplierController extends Controller{
 			$supplierContact[$key]['Phone'] = $cnt->Phone;
 		}
 
-
 		return $this->render('view', [
 			'model' => $model,
-			'supplierContact' => Json::encode($supplierContact)
+			'supplierContact' => Json::encode($supplierContact),
+			'allItem' => $allItem
 		]);
 	}
 
@@ -64,7 +69,18 @@ class SupplierController extends Controller{
 		}
 		echo Json::encode($data);
 		die;
-		// die('{"success":true}');
+	}
+
+	public function actionGetAllItem($q=null){
+		$model = Item::find()->where('Name LIKE "%'.$q.'%"')->all();
+		$data = [];
+
+		foreach($model as $mdl){
+			$data[] = ['id' => $mdl->Id, 'text' => $mdl->Name." (".$mdl->itemUnit__r->UoM.")"]; 
+		}
+
+		echo Json::encode($data);
+		die;
 	}
 
 	public function actionSaveSupplier($id=null){

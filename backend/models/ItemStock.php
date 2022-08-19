@@ -12,7 +12,7 @@ class ItemStock extends \yii\db\ActiveRecord{
 
     public function rules(){
         return [
-            [['IdItem', 'Stock'], 'required'],
+            [['IdItem'], 'required'],
             [['IdItem'], 'integer'],
             [['Stock'], 'number'],
             [['IdItem'], 'exist', 'skipOnError' => true, 'targetClass' => Item::className(), 'targetAttribute' => ['IdItem' => 'Id']],

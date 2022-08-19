@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
-
+$this->registerCssFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css", ['depends'=> [\yii\bootstrap4\BootstrapAsset::className()]]);
+$this->registerJsFile("https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js",['depends' => [\yii\web\JqueryAsset::className()]]);
 $this->title = 'Create Supplier';
 ?>
 <div class="item-create">
@@ -17,10 +18,3 @@ $this->title = 'Create Supplier';
         <!-- END FORM SUPPLIER -->
     </div>
 </div>
-<?php
-    $scriptSupplierCreate = "
-    	var urlSaveSupplier = '".Yii::$app->urlManager->createUrl("supplier/save-supplier")."'
-    ";
-
-    $this->registerJs($scriptSupplierCreate, \yii\web\View::POS_END);
-?>

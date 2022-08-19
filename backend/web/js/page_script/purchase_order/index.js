@@ -1,38 +1,58 @@
 $(document).ready(function(){
-	$('#pjax-po').on('click', '.btn-received', function(){
-		var idPo = $(this).data('idpo')
-		console.log('received => '+idPo)
-	})
+	$('.datepicker').datepicker({
+        dateFormat: 'dd-mm-yy'
+    })
 
 	$('#pjax-po').on('click', '.btn-approved', function(){
-		var idPo = $(this).data('idpo')
-		console.log('approved => '+idPo)
+		if(confirm('PO Disetujui?')){
+			var idPo = $(this).data('idpo')
+
+			$.ajax({
+	            type: 'POST',
+	            url: _url+'backend/purchase-order/approve-po',
+	            data: {idPo},
+	            dataType:'json',
+	            async: true,
+	            beforeSend: function() {
+	                $('.purchase-order-index').busyLoad('show', {spinner: 'cube',text: 'loading'})
+	            },
+	            success: function(d){
+	                if(d.success){
+	                	$.pjax.reload('#pjax-po')
+	                	// $.pjax({container: '#pjax-po'})
+	                }else{
+	                	alert(d.message)
+	                }
+	            },
+	        }).complete(function(d){
+	            $('.purchase-order-index').busyLoad('hide')
+	        })
+		}
 	})
 
-	$('#pjax-po').on('click', '.btn-print', function(){
-		var idPo = $(this).data('idpo')
-		console.log('print => '+idPo)
+	$('#pjax-po').on('click', '.btn-received', function(){
+		if(confirm('PO Sudah diterima?')){
+			var idPo = $(this).data('idpo')
+
+			$.ajax({
+	            type: 'POST',
+	            url: _url+'backend/purchase-order/receive-po',
+	            data: {idPo},
+	            dataType:'json',
+	            async: true,
+	            beforeSend: function() {
+	                $('.purchase-order-index').busyLoad('show', {spinner: 'cube',text: 'loading'})
+	            },
+	            success: function(d){
+	                if(d.success){
+	                	$.pjax.reload('#pjax-po')
+	                }else{
+	                	alert(d.message)
+	                }
+	            },
+	        }).complete(function(d){
+	            $('.purchase-order-index').busyLoad('hide')
+	        })
+		}
 	})
-	// $.ajax({
-	//     type: 'POST',
-	//     url: _url+'backend/purchase-order/submit-po',
-	//     data: {dataPoItem},
-	//     dataType:'json',
-	//     async: true,
-	//     beforeSend: function() {
-	//         $('#po-create-container').busyLoad('show', {spinner: 'cube',text: 'loading'})
-	//     },
-	//     success: function(d){
-	//         if(d.success){
-	//         	var poNum = d.PO.join(', ')
-	//         	alert('PO '+poNum+' berhasil dibuat')
-	//         	window.location.href = _url+'backend/purchase-order/index';
-	//         }else{
-	//         	alert(d.message)
-	//         }
-	//     },
-	// }).complete(function(d){
-	//     $('#po-create-container').busyLoad('hide')
-	//     changePoTotal()
-	// })
 })

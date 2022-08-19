@@ -14,8 +14,8 @@ class PurchaseOrderSearch extends PurchaseOrder
     public function rules()
     {
         return [
-            [['Id', 'IdSupplier', 'Total', 'ReceivedAt', 'ReceivedBy', 'ApprovedAt', 'ApprovedBy', 'CanceledAt', 'CanceledBy', 'CreatedBy', 'Status'], 'integer'],
-            [['PoNumber', 'CreatedAt'], 'safe'],
+            [['Id', 'ReceivedAt', 'ReceivedBy', 'ApprovedAt', 'ApprovedBy', 'CanceledAt', 'CanceledBy', 'CreatedBy', 'Status'], 'integer'],
+            [['PoNumber', 'CreatedAt', 'IdSupplier'], 'safe'],
         ];
     }
 
@@ -35,16 +35,19 @@ class PurchaseOrderSearch extends PurchaseOrder
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $_from, $_to)
     {
         $query = PurchaseOrder::find()
                     ->joinWith(['supplier__r'])
-                    ->where('Status != 0');
+                    ->where('Status != 0 AND CreatedAt >= "'.date('Y-m-d', strtotime($_from)).' 00:00:00'.'" AND CreatedAt <= "'.date('Y-m-d', strtotime($_to)).' 23:59:59'.'"');
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 50
+            ]
         ]);
 
         $this->load($params);

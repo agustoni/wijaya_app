@@ -28,7 +28,7 @@ class PurchaseOrder extends \yii\db\ActiveRecord{
     public function rules(){
         return [
             [['IdSupplier', 'Total'], 'required'],
-            [['Total', 'ReceivedAt', 'ReceivedBy', 'ApprovedAt', 'ApprovedBy', 'CanceledAt', 'CanceledBy', 'Status'], 'integer'],
+            [['Total', 'Status'], 'integer'],
             [['IdSupplier'], 'safe'],
             [['PoNumber'], 'string', 'max' => 50],
         ];

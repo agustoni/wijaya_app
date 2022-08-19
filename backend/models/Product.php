@@ -62,8 +62,8 @@ class Product extends \yii\db\ActiveRecord
                                                 supplier_item.Price LastPrice, 
                                                 supplier_item.LastUpdated LastUpdated,
                                                 supplierItemCost__r.Price PurchasePrice, 
-                                                supplierItemCost__r.Created_At PurchaseAt,
-                                                if(supplier_item.LastUpdated BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() OR supplierItemCost__r.Created_At BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW(), 1, 0) StatusExp
+                                                supplierItemCost__r.CreatedAt PurchaseAt,
+                                                if(supplier_item.LastUpdated BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() OR supplierItemCost__r.CreatedAt BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW(), 1, 0) StatusExp
                                         FROM `supplier_item` 
                                         LEFT JOIN `item` `item__r` ON supplier_item.IdItem = item__r.Id 
                                         LEFT JOIN `item_unit` `itemUnit__r` ON item__r.IdUoM = itemUnit__r.Id 
@@ -80,7 +80,7 @@ class Product extends \yii\db\ActiveRecord
                                             WHERE supplier_item.IdItem = supplier_item2.IdItem
                                         ) 
                                         -- GROUP BY `item__r`.`Id` 
-                                        -- ORDER BY `supplier_item`.`LastUpdated` DESC, `supplierItemCost__r`.`Created_At` DESC, `item__r`.`Name`')->queryAll();
+                                        -- ORDER BY `supplier_item`.`LastUpdated` DESC, `supplierItemCost__r`.`CreatedAt` DESC, `item__r`.`Name`')->queryAll();
 
         return $query;
     }

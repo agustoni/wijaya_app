@@ -7,22 +7,24 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
 
+use backend\models\ItemSearch;
 use backend\models\Item;
 use backend\models\ItemPart;
 use backend\models\ItemUnit;
+use backend\models\Supplier;
 
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 
 class ItemController extends Controller{
 	public function actionIndex(){
-		$model = Item::find()->orderBy(['Id'=>SORT_DESC])->all();
-		$itemType = new Item;
+		$searchModel = new ItemSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-		return $this->render("index", [
-			"model" => $model,
-			"itemType" => $itemType
-		]);
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
 	}
 
 	public function actionView($id){
@@ -33,10 +35,6 @@ class ItemController extends Controller{
 		if($model->Type == 2){
 			$itemPart = Json::encode($this->getItemCombined('', $id));
 		}
-
-		// echo "<pre>";
-		// print_r($itemPart);
-		// die;
 
 		return $this->render('view', [
 			'model' => $model,
@@ -63,7 +61,7 @@ class ItemController extends Controller{
 
 	public function actionSaveItem($id=null){
 		$transaction = \Yii::$app->db->beginTransaction();
-
+		
 		try{
 			$idItem = $_POST['IdItem'];
 			$name = $_POST['Name'];
@@ -71,20 +69,20 @@ class ItemController extends Controller{
 			$type = $_POST['Type'];
 			$description = $_POST['Description'];
 
+			if(!$uom){
+				$uom = $this->saveUom($_POST['NewUoM']);
+			}
+
 			if($idItem){
 				$model = Item::findOne($idItem);
 			}else{
 				$model = new Item;
 
 				// check apakah item dengan IdUoM yang di-input sudah ada
-				$checkData = Item::find()->where("Name = '".$name."' AND IdUoM = ".$uom." AND Type = ".$type)->one();
+				$checkData = Item::find()->where("Name = '".$name."' AND IdUoM = '".$uom."' AND Type = ".$type)->one();
 				if(!empty($checkData)){
 					throw new \Exception("Input gagal: Item yang dimasukan sudah terdaftar!"); 
 				}
-			}
-
-			if(!$uom){
-				$uom = $this->saveUom($_POST['NewUoM']);
 			}
 		
 			$model->Name = $name;
@@ -177,7 +175,10 @@ class ItemController extends Controller{
         $data = ItemUnit::find()->where('UoM LIKE "%' . $q .'%"')->all();
         $out = [];
         foreach ($data as $d) {
-            $out[] = ['Id' => $d->Id, 'UoM' => $d->UoM];
+            $out[] = [
+            	'Id' => $d->Id, 
+            	'UoM' => $d->UoM
+            ];
         }
         echo Json::encode($out);
         die;
@@ -187,7 +188,11 @@ class ItemController extends Controller{
     	$data = Item::find()->where('Name LIKE "%' . $q .'%"')->all();
     	$out = [];
     	foreach ($data as $d) {
-            $out[] = ['Id' => $d->Id, 'Name' => $d->Name, 'UoM' => $d->itemUnit__r->UoM];
+            $out[] = [
+            	'Id' => $d->Id, 
+            	'Name' => $d->Name, 
+            	'UoM' => $d->itemUnit__r->UoM
+            ];
         }
         echo Json::encode($out);
         die;
@@ -210,7 +215,14 @@ class ItemController extends Controller{
     		$itemPart = [];
 
     		foreach($data->itemPartParent__r as $part){
-    			$itemPart[] = ['IdItemPart' => $part->Id, 'Id' => $part->IdItem, 'Part' => $part->item__r->Name, 'UoM' => $part->item__r->itemUnit__r->UoM, 'Qty' => $part->Qty, 'Description' => $part->Description];
+    			$itemPart[] = [
+    				'IdItemPart' => $part->Id, 
+    				'Id' => $part->IdItem, 
+    				'Part' => $part->item__r->Name, 
+    				'UoM' => $part->item__r->itemUnit__r->UoM, 
+    				'Qty' => $part->Qty, 
+    				'Description' => $part->Description
+    			];
     		}
 
             $out[] = ['Id' => $data->Id, 'Name' => $data->Name." (".$data->itemUnit__r->UoM.")", 'ItemPart' => $itemPart];
@@ -221,14 +233,38 @@ class ItemController extends Controller{
 	    		$itemPart = [];
 
 	    		foreach($d->itemPartParent__r as $part){
-	    			$itemPart[] = ['IdItemPart' => $part->Id, 'Id' => $part->IdItem, 'Part' => $part->item__r->Name, 'UoM' => $part->item__r->itemUnit__r->UoM, 'Qty' => $part->Qty, 'Description' => $part->Description];
+	    			$itemPart[] = [
+	    				'IdItemPart' => $part->Id, 
+	    				'Id' => $part->IdItem, 
+	    				'Part' => $part->item__r->Name, 
+	    				'UoM' => $part->item__r->itemUnit__r->UoM, 
+	    				'Qty' => $part->Qty, 
+	    				'Description' => $part->Description
+	    			];
 	    		}
 
-	            $out[] = ['Id' => $d->Id, 'Name' => $d->Name." (".$d->itemUnit__r->UoM.")", 'ItemPart' => $itemPart];
+	            $out[] = [
+	            	'Id' => $d->Id, 
+	            	'Name' => $d->Name." (".$d->itemUnit__r->UoM.")", 
+	            	'ItemPart' => $itemPart
+	            ];
 	        }
     	}
 
         return $out;
+    }
+
+    public function actionGetSupplier($q){
+    	$data = Supplier::find()->where('Name LIKE "%' . $q .'%"')->all();
+    	$out = [];
+    	foreach ($data as $d) {
+            $out[] = [
+            	'Id' => $d->Id, 
+            	'Name' => $d->Name, 
+            ];
+        }
+        echo Json::encode($out);
+        die;
     }
 
     public function saveUom($uom){
