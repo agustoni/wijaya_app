@@ -13,6 +13,7 @@ backend/web/assets/*
 backend/web/index-test.php
 backend/web/index.php
 backend/config/main.php
+backend/assets/*
 frontend/web/index.php
 frontend/web/robots.txt
 common/config/*
@@ -33,6 +34,7 @@ dist/
 
 # Log files
 *.log
+*ftpquota
 
 # Package files
 *.jar
