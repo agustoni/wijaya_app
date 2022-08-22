@@ -1,7 +1,5 @@
 <?php 
 	$this->title = "User Master";
-	// $this->params['breadcrumbs'][] = ['label' => 'Invoices', 'url' => ['index']];
-	// $this->params['breadcrumbs'][] = $this->title;
 	\yii\web\YiiAsset::register($this);
 ?>
 <div class="user-wrpper">

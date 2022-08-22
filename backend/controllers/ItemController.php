@@ -30,7 +30,7 @@ class ItemController extends Controller{
 	public function actionView($id){
 		$model = Item::findOne($id);
 		$itemType = new Item;
-		$itemPart = null;
+		$itemPart = 'null';
 
 		if($model->Type == 2){
 			$itemPart = Json::encode($this->getItemCombined('', $id));
@@ -68,10 +68,6 @@ class ItemController extends Controller{
 			$uom = $_POST['IdUoM'];
 			$type = $_POST['Type'];
 			$description = $_POST['Description'];
-
-			if(!$uom){
-				$uom = $this->saveUom($_POST['NewUoM']);
-			}
 
 			if($idItem){
 				$model = Item::findOne($idItem);
@@ -267,20 +263,20 @@ class ItemController extends Controller{
         die;
     }
 
-    public function saveUom($uom){
-		$model = ItemUnit::find()->where('UoM = "'.$uom.'"')->one();
+ //    public function saveUom($uom){
+	// 	$model = ItemUnit::find()->where('UoM = "'.$uom.'"')->one();
 
-		if(!empty($model)){
-			return $model->Id;
-		}else{
-			$newUoM = new ItemUnit;
+	// 	if(!empty($model)){
+	// 		return $model->Id;
+	// 	}else{
+	// 		$newUoM = new ItemUnit;
 
-			$newUoM->UoM = $uom;
-			$newUoM->save();
+	// 		$newUoM->UoM = $uom;
+	// 		$newUoM->save();
 
-			return $newUoM->Id;
-		}
-	}
+	// 		return $newUoM->Id;
+	// 	}
+	// }
 }
 
 ?>

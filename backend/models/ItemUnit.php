@@ -38,7 +38,7 @@ class ItemUnit extends \yii\db\ActiveRecord
     {
         return [
             'Id' => 'ID',
-            'UoM' => 'Uo M',
+            'UoM' => 'UoM',
         ];
     }
 }

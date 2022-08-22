@@ -6,7 +6,7 @@ use yii\widgets\Pjax;
 
 $this->registerCssFile("@web/web/css/jquery-ui.css", ['depends'=> [\yii\bootstrap4\BootstrapAsset::className()]]);
 $this->registerJsFile("@web/web/js/jquery-ui.js", ['depends'=> [\yii\bootstrap4\BootstrapAsset::className()]]);
-$this->registerJsFile('@web/web/js/page_script/purchase_order/index.js',['depends' => [\yii\web\JqueryAsset::class]]);
+$this->registerJsFile('@web/web/js/page_script/purchase_order/index.js',['depends' => [\yii\web\JqueryAsset::class], 'defer' => 'defer']);
 
 $this->title = 'Purchase Orders';
 

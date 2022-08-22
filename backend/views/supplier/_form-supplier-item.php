@@ -1,5 +1,5 @@
 <?php 
-    $this->registerJsFile('@web/web/js/page_script/supplier/_form-supplier-item.js',['depends' => [\yii\web\JqueryAsset::class]]);
+    $this->registerJsFile('@web/web/js/page_script/supplier/_form-supplier-item.js',['depends' => [\yii\web\JqueryAsset::class], 'defer' => 'defer']);
 ?>
 <style>
 	.select2-container--default .select2-selection--single .select2-selection__arrow {height: 34px;position: absolute;top: 1px;right: 1px;width: 20px;}
