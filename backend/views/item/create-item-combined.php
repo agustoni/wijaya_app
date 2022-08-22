@@ -1,6 +1,6 @@
 <?php
 use yii\helpers\Html;
-
+$this->registerJsFile('@web/web/js/page_script/item/_form-item-combined.js',['depends' => [\yii\web\JqueryAsset::class], 'defer' => 'defer']);
 $this->title = 'Buat Item Kombinasi';
 ?>
 <style>

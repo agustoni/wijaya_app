@@ -1,5 +1,5 @@
 <?php 
-    $this->registerJsFile('@web/web/js/page_script/item/_form-item-combined.js',['depends' => [\yii\web\JqueryAsset::class]]);
+    $this->registerJsFile('@web/web/js/page_script/item/_form-item-combined.js',['depends' => [\yii\web\JqueryAsset::class], 'defer' => 'defer']);
 ?>
 
 <div class="card card-light mb-3" id="item-combined-container">

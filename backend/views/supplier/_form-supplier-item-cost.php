@@ -1,5 +1,5 @@
 <?php 
-    $this->registerJsFile('@web/web/js/page_script/supplier/_form-supplier-item-cost.js',['depends' => [\yii\web\JqueryAsset::class]]);
+    $this->registerJsFile('@web/web/js/page_script/supplier/_form-supplier-item-cost.js',['depends' => [\yii\web\JqueryAsset::class], 'defer' => 'defer']);
 ?>
 
 <div class="card card-light mb-3" id="form-supplier-item-cost">

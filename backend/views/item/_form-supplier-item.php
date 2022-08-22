@@ -1,3 +1,7 @@
+<?php 
+    $this->registerJsFile('@web/web/js/page_script/item/_form-supplier-item.js',['depends' => [\yii\web\JqueryAsset::class], 'defer' => 'defer']);
+?>
+
 <div class="card card-light mb-3" id="supplier-master-container">
     <div class="card-header bg-info text-white p-2">
         <h4 class="card-title m-0">Daftar Supplier</h4>

@@ -4,7 +4,7 @@
 	$this->params['breadcrumbs'][] = $this->title;
 	\yii\web\YiiAsset::register($this);
 
-	$this->registerJsFile('@web/web/js/page_script/purchase_order/create_update.js',['depends' => [\yii\web\JqueryAsset::class]]);
+	$this->registerJsFile('@web/web/js/page_script/purchase_order/create_update.js',['depends' => [\yii\web\JqueryAsset::class], 'defer' => 'defer']);
 ?>
 
 <div class="card card-light mb-3" id="po-form-container">

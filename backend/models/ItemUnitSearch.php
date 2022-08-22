@@ -4,12 +4,12 @@ namespace backend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Item;
+use backend\models\ItemUnit;
 
 /**
- * ItemSearch represents the model behind the search form of `backend\models\Item`.
+ * ItemUnitSearch represents the model behind the search form of `backend\models\ItemUnit`.
  */
-class ItemSearch extends Item
+class ItemUnitSearch extends ItemUnit
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class ItemSearch extends Item
     public function rules()
     {
         return [
-            // [['Id', 'IdUoM', 'Type'], 'integer'],
-            [['IdUoM', 'Name', 'Description', 'Type'], 'safe'],
+            [['Id'], 'integer'],
+            [['UoM'], 'safe'],
         ];
     }
 
@@ -40,17 +40,12 @@ class ItemSearch extends Item
      */
     public function search($params)
     {
-        $query = Item::find()
-                        ->joinWith(['itemUnit__r']);
+        $query = ItemUnit::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> ['defaultOrder' => ['Id' => SORT_DESC]],
-            'pagination' => [
-                'pageSize' => 50
-            ]
         ]);
 
         $this->load($params);
@@ -64,13 +59,9 @@ class ItemSearch extends Item
         // grid filtering conditions
         $query->andFilterWhere([
             'Id' => $this->Id,
-            // 'IdUoM' => $this->IdUoM,
-            'Type' => $this->Type,
         ]);
 
-        $query->andFilterWhere(['like', 'Name', $this->Name])
-            ->andFilterWhere(['like', 'item_unit.UoM', $this->IdUoM])
-            ->andFilterWhere(['like', 'Description', $this->Description]);
+        $query->andFilterWhere(['like', 'UoM', $this->UoM]);
 
         return $dataProvider;
     }
